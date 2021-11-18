@@ -12,6 +12,10 @@ public class OpenSshTunneling {
 
 	Logger logger = Logger.getLogger(this.getClass());
 	
+	private String REMOTE_ENV_HOST = "";
+	private int REMOTE_ENV_PORT = 0;
+	private String REMOTE_ENV_PRIVATE_KEY = ""; 
+	
 	private String MAGENTO_CLOUD_PRIVATE_KEY = "";
 	private String MAGENTO_CLOUD_HOST = "";
 	private int MAGENTO_CLOUD_PORT = 0;
