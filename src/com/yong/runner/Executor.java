@@ -1,46 +1,31 @@
 package com.yong.runner;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Map;
 
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
-import com.yong.common.Configuration;
-import com.yong.ssh.OpenSshTunneling;
+import com.yong.dto.ConfigurationDTO;
+import com.yong.msg.MsgCodeConfiguration;
 
 public class Executor {
 
 	public static void main(String[] args) {
-		try {
-			if(args == null || args.length == 0) {
-				System.out.println();
-			} else {
-				// Set context.properties
-				Configuration.initialize(args[0]);
-				
-				Logger logger = Logger.getLogger(Configuration.class);
-				
-				// Set Running Environment
-				List<String> envList = Arrays.asList(Configuration.getString(""));
-				logger.info("Running Environment : " + Configuration.getString(""));
-				
-				if(envList.contains("PROD")) {
-					OpenSshTunneling ost = new OpenSshTunneling("PROD");
-					Runnable run = new ExecuteTimer(ost);
-					run.run();
-				}
-				if(envList.contains("STG")) {
-					OpenSshTunneling ost2 = new OpenSshTunneling("STG");
-					Runnable run2 = new ExecuteTimer(ost2);
-					run2.run();
-				}
-			}
+		
+		try { 
+			Map<String, Object> propMap = new Yaml().load(new FileReader(MsgCodeConfiguration.MSG_VALUE_PATH_CONTEXT)); 
+			System.out.println(propMap); 
+			System.out.println(propMap.get("configuration")); 
+			System.out.println(((Map<String, Object>)propMap.get("environment")).get("envList"));
 			
-		}catch (Exception e) {
-			
+			Yaml yaml = new Yaml(new Constructor(ConfigurationDTO.class));
+			ConfigurationDTO propMap1 = yaml.load(new FileReader(MsgCodeConfiguration.MSG_VALUE_PATH_CONTEXT));
+			System.out.println(propMap1);
+			System.out.println(propMap1.getConfiguration().get("log4j").getPath());
+		} catch (FileNotFoundException e) { 
+			e.printStackTrace(); 
 		}
 	}
-
 }

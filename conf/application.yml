@@ -1,0 +1,30 @@
+configuration:
+  log4j:
+    path: ./conf/log4j.properties
+environment:
+  envList:
+    - env: prod
+      local:
+        port:
+      remote:
+        ssh:
+          host:
+          port:
+          key:
+      mysql:
+        host:
+        port:
+        id:
+        pwd:
+    - env: stg
+      local:
+        port:
+      remote:
+        ssh:
+          host:
+          port:
+          key:
+        command:
+          line:  
+      
+    
