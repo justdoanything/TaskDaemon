@@ -4,22 +4,25 @@ environment:
       local:
         port: 3000
       remote:
-        host:
-        port:
-        key:
+        host: ssh.ap-3.magento.cloud
+        port: 22
+        key: ./conf/private_key/private_key.ppk
       mysql:
-        host:
-        port:
-        id:
-        pwd:
+        host: 127.0.0.1
+        port: 3306
+        id: cbao65gdzs564_stg
+        pwd: VRGtSHDApCvPid2
     - env: stg
       local:
         port: 3005
       remote:
-        host:
-        port:
-        key:
+        host: ssh.ap-3.magento.cloud
+        port: 22
+        key: ./conf/private_key/private_key.ppk
       command:
-        line:  
+        line:
+          - ls -al
+          - pwd
+          - lscpu
       
     
