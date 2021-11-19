@@ -1,53 +1,34 @@
 package com.yong.common;
 
-import java.io.FileInputStream;
-import java.util.Properties;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.yaml.snakeyaml.Yaml;
 
-import com.yong.util.MsgCode;
+import com.yong.msg.MsgCodeConfiguration;
 
 public class Configuration {
 
-	private static Logger logger = null;
-	private static Properties properties = new Properties();
+	private final Logger logger =  Logger.getLogger(Configuration.class);
 	
-	public static void initialize(String path) throws Exception {
-		try {
-			// set application properties(context.properties)
-			FileInputStream fis = new FileInputStream(path);
-			properties.load(fis);
+	public void initialize() throws Exception {
+			PropertyConfigurator.configure(MsgCodeConfiguration.MSG_VALUE_PATH_LOG4J);
+			logger.info("Complete to load log4j properties file from " + MsgCodeConfiguration.MSG_VALUE_PATH_LOG4J);
 			
-			// set Log4j properties
-			String LOG4J_CONFIG_FILE_PATH = Configuration.getString(MsgCode.CONF_KEY_PATH_LOG4J);
-			PropertyConfigurator.configure(LOG4J_CONFIG_FILE_PATH);
-			logger = Logger.getLogger(Configuration.class);
-			logger.info("[SUCCESS] Load App Properties File : " + path);
-			logger.info("[SUCCESS] Load Log4j Properties File : " + LOG4J_CONFIG_FILE_PATH);
-		} catch (Exception e) {
-			logger.info("[Exception] Fail to App Initialize : " + e.toString());
-			throw new Exception(e);
-		}
+			logger.info("Trying to parse application.yml to start this program!");
 	}
 	
-	public static String getString(String key) throws Exception {
-		return properties.getProperty(key).trim();
-	}
-	
-	public static boolean getBoolean(String key) throws Exception {
-		if(properties.getProperty(key).trim().equals("1"))
-			return true;
-		else
-			return false;
-	}
-	
-	public static int getInt(String key) throws Exception {
+	private void parseApplicationYml() {
 		try {
-			return Integer.parseInt(properties.getProperty(key).trim());
-		} catch (Exception e) {
-			logger.info("Exception in getting properties - Integer Parsing Exception" + e.toString());
-			throw new Exception(e);
-		}
+			Map<String, Object> propMap = new Yaml().load(new FileReader(MsgCodeConfiguration.MSG_VALUE_PATH_APPLICATION));
+			
+		}catch (FileNotFoundException e) { 
+			e.printStackTrace(); 
+			logger.error("There is a exception in progress : " + e.toString());
+		}	
 	}
+	
 }

@@ -7,10 +7,9 @@ environment:
       local:
         port:
       remote:
-        ssh:
-          host:
-          port:
-          key:
+        host:
+        port:
+        key:
       mysql:
         host:
         port:
@@ -20,11 +19,10 @@ environment:
       local:
         port:
       remote:
-        ssh:
-          host:
-          port:
-          key:
-        command:
-          line:  
+        host:
+        port:
+        key:
+      command:
+        line:  
       
     
