@@ -34,17 +34,19 @@ public class Configuration {
 			int index = 1;
 			for(Object env : envList) {
 				logger.info("env" + index++ + " : " + env.toString());
+//				logger.info("===============================START");
+//				getValue(env);
+//				logger.info("===============================END");
 				logger.info("  - local.port : " + this.getValue(env, new String[] {"local","port"}));
 				logger.info("  - remote.host : " + this.getValue(env, new String[] {"remote","host"}));
 				logger.info("  - remote.port : " + this.getValue(env, new String[] {"remote","port"}));
 				logger.info("  - remote.key : " + this.getValue(env, new String[] {"remote","key"}));
-				if(((Map) env).get("mysql") != null) {
+				if(this.getValue(env, new String[] {"mysql"}) != null) {
 					logger.info("  - mysql.host : " + this.getValue(env, new String[] {"mysql","host"}));
 					logger.info("  - mysql.port : " + this.getValue(env, new String[] {"mysql","port"}));
 					logger.info("  - mysql.id : " + this.getValue(env, new String[] {"mysql","id"}));
 					logger.info("  - mysql.pwd : " + this.getValue(env, new String[] {"mysql","pwd"}));
-					logger.info("  - mysql.test.test : " + this.getValue(env, new String[] {"mysql","test","test"}));
-				} else if (((Map) env).get("command") != null) {
+				} else if (this.getValue(env, new String[] {"command"}) != null) {
 					logger.info("  - command.line : " + this.getValue(env, new String[] {"command","line"}));
 				} else {
 					logger.error("Wrong Type");
@@ -63,6 +65,44 @@ public class Configuration {
 			tt = CommonUtil.ObjToMap(tt).get(key);
 		}
 		return tt;
+	}
+	
+	private boolean mapOrNot(Object obj) {
+		boolean result = true;
+		try {
+			CommonUtil.ObjToMap(obj);
+		} catch (Exception e) {
+			result = false;
+		}
+		return result;
+	}
+	
+	private Object getValue(Object env) {
+		
+		Map<String, Object> t = CommonUtil.ObjToMap(env);
+		for(String key : t.keySet()) {
+			if(mapOrNot(t.get(key))) {
+				getValue(t.get(key));
+//				System.out.println(key + " : " + t.get(key));
+				System.out.print(key + ".");
+//				Map<String, Object> tt = CommonUtil.ObjToMap(t.get(key));
+//				for(String key2 : tt.keySet()) {
+//					System.out.println(key2 + " : " + tt.get(key2));
+//					if(mapOrNot(tt.get(key2))) {
+//						
+//						Map<String, Object> ttt = CommonUtil.ObjToMap(tt.get(key2));
+//						for(String key3 : ttt.keySet()) {
+//							System.out.println(key3 + " : " + ttt.get(key3));
+//							if(mapOrNot(ttt.get(key3))) {}
+//						}
+//					}
+//				}
+			} else {
+				System.out.println(key + ":" + t.get(key).toString());
+			}
+			
+		}
+		return null;
 	}
 	
 }
