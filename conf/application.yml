@@ -1,11 +1,8 @@
-configuration:
-  log4j:
-    path: ./conf/log4j.properties
 environment:
   envList:
     - env: prod
       local:
-        port:
+        port: 3000
       remote:
         host:
         port:
@@ -17,7 +14,7 @@ environment:
         pwd:
     - env: stg
       local:
-        port:
+        port: 3005
       remote:
         host:
         port:
