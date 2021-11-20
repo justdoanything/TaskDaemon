@@ -24,7 +24,7 @@ public class ExecuteTimer implements Runnable {
 	public void run() {
 		try {
 			// Set time interval to run this program
-			fileDelay = Configuration.getInt(MsgCode.CONF_KEY_TIME_INTERVAL);
+//			fileDelay = Configuration.getInt(MsgCode.CONF_KEY_TIME_INTERVAL);
 			
 			logger.info(String.format("Time Interval Delay : %d (ms)", fileDelay));
 			

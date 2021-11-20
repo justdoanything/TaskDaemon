@@ -24,5 +24,8 @@ environment:
           - ls -al
           - pwd
           - lscpu
+      deph1:
+        dephth2:
+          pethi: ttt
       
     
