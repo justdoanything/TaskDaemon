@@ -2,40 +2,34 @@ environment:
   envList:
     - env: prod
       execute:
-        interval: 60000
+        interval: 30000
         type: mysql 
       local:
         port: 3000
       remote:
-        host: prodHostName
-        port: 11
-        key: ./conf/private_key/private_key.ppk
+        name: prodRemoteName
+        host: prodRemoteHost
+        port: 22
+        key: prodRemoteKey
         mysql: 
-          host: prodMysqlHost
+          host: 127.0.0.1
           port: 3306
-          id: prodMysqlId1
-          pwd: prodMysqlPwd2
-          pp:
     - env: stg
       execute:
-        interval: 60000
-        type: mysql
+        interval: 30000
+        type: command
       local:
         port: 3005
       remote:
-        host: stgHostName
+        name: stgRemoteName
+        host: stgRemoteHost
         port: 22
-        key: ./conf/private_key/private_key.ppk
-        mysql: 
-          host: prodMysqlHost
-          port: 3306
-          id: prodMysqlId1
-          pwd: prodMysqlPwd2
-      command:
-        line:
-          - ls -al
-          - pwd
-          - lscpu
+        key: stgRemoteKey
+        command:
+          line:
+            - ls -al
+            - pwd
+            - lscpu
     - env: dev
       execute:
         interval: 60000
@@ -43,13 +37,12 @@ environment:
       local:
         port: 3010
       remote:
-        host: devHostName
+        name: devRemoteName
+        host: devRemoteHost
         port: 22
-        key: ./conf/private_key/private_key.ppk
-      command:
-        line:
-          - ls -al
-          - pwd
-          - lscpu
-      
-    
+        key: devRemoteKey
+        command:
+          line:
+            - ls -al
+            - pwd
+            - lscpu
