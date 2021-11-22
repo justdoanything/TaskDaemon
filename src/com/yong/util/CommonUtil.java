@@ -18,4 +18,14 @@ public class CommonUtil {
 		return (String) obj;
 	}
 	
+	public static boolean mapOrNot(Object obj) {
+		boolean result = true;
+		try {
+			CommonUtil.ObjToMap(obj);
+		} catch (Exception e) {
+			result = false;
+		}
+		return result;
+	}
+	
 }

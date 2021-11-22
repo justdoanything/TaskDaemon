@@ -27,5 +27,22 @@ environment:
       deph1:
         dephth2:
           pethi: ttt
+        depth4: zz
+    - env: dev
+      local:
+        port: 3005
+      remote:
+        host: 1
+        port: 22
+        key: 1
+      command:
+        line:
+          - ls -al
+          - pwd
+          - lscpu
+      deph1:
+        dephth2:
+          pethi: ttt
+        depth4: zz
       
     

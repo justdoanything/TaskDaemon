@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 
 import com.yong.common.Configuration;
 import com.yong.ssh.OpenSshTunneling;
-import com.yong.util.MsgCode;
 
 public class ExecuteTimer implements Runnable {
 
