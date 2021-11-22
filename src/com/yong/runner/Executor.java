@@ -13,8 +13,8 @@ public class Executor {
 				OpenSshTunneling ost = new OpenSshTunneling(index);
 //				Runnable runnable = new ExecuteTimer(ost);
 //				runnable.run();
-				System.out.println("COMPLETE");
 			}
+			System.out.println("COMPLETE");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

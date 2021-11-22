@@ -12,6 +12,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.yaml.snakeyaml.Yaml;
 
 import com.yong.msg.MsgCodeConfiguration;
+import com.yong.msg.MsgCodeException;
 import com.yong.util.CommonUtil;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
@@ -27,12 +28,18 @@ public class Configuration {
 	 * @implNote Initialize context file when this program started.
 	 */
 	public static void initialize() throws Exception {
+		try {
 			PropertyConfigurator.configure(MsgCodeConfiguration.MSG_VALUE_PATH_LOG4J);
 			logger.info("Complete to load log4j properties file from " + MsgCodeConfiguration.MSG_VALUE_PATH_LOG4J);
 			logger.info("Trying to parse application.yml to start this program!");
 			parseApplicationYml();
 			logger.info("Complete to load application.yml!");
-			logger.info("application map : " + envListMap.toString());
+			logger.debug("application.yml was parsed to List<Map> : " + envListMap.toString());
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error("There is a exception in progress : " + e.toString());
+			ExceptionHandler.exception(MsgCodeException.MSG_TYPE_CONFIGURATION, MsgCodeException.MSG_CODE_INITIAL_APPLICATION_ERROR, e.toString());
+		}
 	}
 	
 	/**
@@ -55,15 +62,14 @@ public class Configuration {
 				createYmlToMap(env, envListMap.get(index));
 				index++;
 			}
-			
 		}catch (FileNotFoundException e) { 
 			e.printStackTrace(); 
 			logger.error("There is a fileNotFoundException in progress : " + e.toString());
-			throw new FileNotFoundException(e.toString());
+			ExceptionHandler.exception(MsgCodeException.MSG_TYPE_CONFIGURATION, MsgCodeException.MSG_CODE_FILE_NOT_FOUND, e.toString());
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error("There is a exception in progress : " + e.toString());
-			throw new Exception(e);
+			ExceptionHandler.exception(MsgCodeException.MSG_TYPE_CONFIGURATION, MsgCodeException.MSG_CODE_PARESE_APPLICATION_ERROR, e.toString());
 		}
 	}
 	
@@ -74,7 +80,6 @@ public class Configuration {
 	 * @implNote Create envListMap from application.yml
 	 */
 	private static void createYmlToMap(Object env, Map<String, Object> envListMap) throws Exception {
-//		this.doDepthFirstSearch(env, CommonUtil.ObjToString(((Map) env).get(MsgCodeConfiguration.MSG_WORD_KEY_ENV)), envListMap);
 		doDepthFirstSearch(env, "", envListMap);
 	}
 	
@@ -96,14 +101,13 @@ public class Configuration {
 				doDepthFirstSearch(obj.get(key), parentKey, envListMap);
 				
 				// End to search child node
-//				parentKey = parentKey.replace("." + key, "");
 				parentKey = parentKey.contains("." + key) ? parentKey.replace("." + key, "") : parentKey.replace(key, "");
 				
 			} else {
 				// End to search parent node
 				String configKey = (parentKey.equals("") ? key : parentKey + "." + key);
 				envListMap.put(configKey, obj.get(key));
-				logger.info(configKey + " : " + obj.get(key).toString());
+				logger.debug(configKey + " : " + obj.get(key).toString());
 			}
 		}
 	}

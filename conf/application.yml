@@ -15,6 +15,7 @@ environment:
           port: 3306
           id: prodMysqlId1
           pwd: prodMysqlPwd2
+          pp:
     - env: stg
       execute:
         interval: 60000
@@ -25,6 +26,11 @@ environment:
         host: stgHostName
         port: 22
         key: ./conf/private_key/private_key.ppk
+        mysql: 
+          host: prodMysqlHost
+          port: 3306
+          id: prodMysqlId1
+          pwd: prodMysqlPwd2
       command:
         line:
           - ls -al

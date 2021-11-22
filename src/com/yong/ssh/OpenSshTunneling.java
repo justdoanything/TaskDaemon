@@ -43,12 +43,12 @@ public class OpenSshTunneling {
 		
 		if(executeType.equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_MYSQL)) {
 			this.remoteMysqlHost = Configuration.getString(index, "remote.mysql.host");
-			this.remoteMysqlPort = Configuration.getInt(index, "mysql.port");
-			this.remoteMysqlId = Configuration.getString(index, "mysql.id");
-			this.remoteMysqlPwd = Configuration.getString(index, "mysql.pwd");
+			this.remoteMysqlPort = Configuration.getInt(index, "remote.mysql.port");
+			this.remoteMysqlId = Configuration.getString(index, "remote.mysql.id");
+			this.remoteMysqlPwd = Configuration.getString(index, "remote.mysql.pwd");
 		}
 		else if(executeType.equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_COMMAND)) {
-			this.commandLine = Configuration.getList(index, "command.line");
+			this.commandLine = Configuration.getList(index, "remote.command.line");
 		}
 		else {
 			ExceptionHandler.exception(MsgCodeException.MSG_TYPE_CONFIGURATION, MsgCodeException.MSG_CODE_WRONG_EXECUTE_TYPE, Configuration.getEnvMap(index).toString());
