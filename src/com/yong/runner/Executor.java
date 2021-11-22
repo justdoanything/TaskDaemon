@@ -7,13 +7,13 @@ public class Executor {
 
 	public static void main(String[] args) {
 		try {
-			Configuration config = new Configuration();
-			config.initialize();
+			Configuration.initialize();
 			
-			for(int index = 0; index < config.getEnvListSize(); index++) {
-				OpenSshTunneling ost = new OpenSshTunneling(null);
-				Runnable runnable = new ExecuteTimer(ost);
-				runnable.run();
+			for(int index = 0; index < Configuration.getEnvListSize(); index++) {
+				OpenSshTunneling ost = new OpenSshTunneling(index);
+//				Runnable runnable = new ExecuteTimer(ost);
+//				runnable.run();
+				System.out.println("COMPLETE");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

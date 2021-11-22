@@ -21,27 +21,27 @@ public class ExecuteTimer implements Runnable {
 	
 	@Override
 	public void run() {
-		try {
+//		try {
 			// Set time interval to run this program
 //			fileDelay = Configuration.getInt(MsgCode.CONF_KEY_TIME_INTERVAL);
 			
-			logger.info(String.format("Time Interval Delay : %d (ms)", fileDelay));
-			
-			// Running the program every "fileDelay (ms)"
-			new Timer().schedule(new TimerTask() {
-				
-				@Override
-				public void run() {
-					try {
-						if(ost != null && ost.checkSshPort())
-							ost.openSshPort();
-					}catch (Exception e) {
-						logger.error("Exception in opening SSH : " + e.toString());
-					}
-				}
-			}, 1000, fileDelay);
-		}catch (Exception e) {
-			logger.error("Exception in Runnable : " + e.toString());
-		}
+//			logger.info(String.format("Time Interval Delay : %d (ms)", fileDelay));
+//			
+//			// Running the program every "fileDelay (ms)"
+//			new Timer().schedule(new TimerTask() {
+//				
+//				@Override
+//				public void run() {
+//					try {
+//						if(ost != null && ost.checkSshPort())
+//							ost.openSshPort();
+//					}catch (Exception e) {
+//						logger.error("Exception in opening SSH : " + e.toString());
+//					}
+//				}
+//			}, 1000, fileDelay);
+//		}catch (Exception e) {
+//			logger.error("Exception in Runnable : " + e.toString());
+//		}
 	}
 }

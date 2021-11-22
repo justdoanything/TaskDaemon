@@ -7,5 +7,8 @@ public class MsgCodeConfiguration {
 	public static final String MSG_WORD_KEY_ENVIRONMENT = "environment";
 	public static final String MSG_WORD_KEY_ENVLIST = "envList";
 	public static final String MSG_WORD_KEY_ENV = "env";
+	
+	public static final String MSG_WORD_EXECUTE_TYPE_MYSQL = "mysql";
+	public static final String MSG_WORD_EXECUTE_TYPE_COMMAND = "command";
 }
 

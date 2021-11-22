@@ -1,71 +1,86 @@
 package com.yong.ssh;
 
-import java.net.Socket;
-import java.util.Properties;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
+import com.yong.common.Configuration;
+import com.yong.common.ExceptionHandler;
+import com.yong.msg.MsgCodeConfiguration;
+import com.yong.msg.MsgCodeException;
 
+@SuppressWarnings({"unused", "rawtypes"})
 public class OpenSshTunneling {
 
 	Logger logger = Logger.getLogger(this.getClass());
 	
-//	private String REMOTE_ENV_HOST = "";
-//	private int REMOTE_ENV_PORT = 0;
-//	private String REMOTE_ENV_PRIVATE_KEY = ""; 
-//	
-//	private String MAGENTO_CLOUD_PRIVATE_KEY = "";
-//	private String MAGENTO_CLOUD_HOST = "";
-//	private int MAGENTO_CLOUD_PORT = 0;
-//	
-//	private String MAGENTO_MYSQL_HOST = "";
-//	private int MAGENTO_MYSQL_PORT = 0;
-//	
-//	private String MAGENTO_RUN_ENV = "";
-//	private String MAGENTO_RUN_ENV_SSH_USER = "";
-//	private int LOCAL_OPEN_PORT = 0;
+	private int executeInterval = 60 * 1000; // default 60s
+	private String executeType;
 	
-	public OpenSshTunneling(String env) throws Exception {
-//		if(env.equals("PROD")) {
-//			this.MAGENTO_RUN_ENV = "PROD";
-//			this.MAGENTO_RUN_ENV_SSH_USER = "";
-//			this.LOCAL_OPEN_PORT = 0;
-//		}
-//		if(env.equals("STG")) {
-//			this.MAGENTO_RUN_ENV = "STG";
-//			this.MAGENTO_RUN_ENV_SSH_USER = "";
-//			this.LOCAL_OPEN_PORT = 0;
-//		}
+	private int localPort;
+	
+	private String remoteHost;
+	private int remotePort;
+	private String remoteKey;
+	
+	private String remoteMysqlHost;
+	private int remoteMysqlPort;
+	private String remoteMysqlId;
+	private String remoteMysqlPwd;
+	
+	private List commandLine;
+	
+	public OpenSshTunneling(int index) throws Exception {
+		
+		this.executeInterval = Configuration.getInt(index, "execute.interval"); 
+		this.executeType = Configuration.getString(index, "execute.type");
+		
+		this.localPort = Configuration.getInt(index, "local.port");
+		
+		this.remoteHost = Configuration.getString(index, "remote.host");
+		this.remotePort = Configuration.getInt(index, "remote.port");
+		this.remoteKey = Configuration.getString(index, "remote.key");
+		
+		if(executeType.equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_MYSQL)) {
+			this.remoteMysqlHost = Configuration.getString(index, "remote.mysql.host");
+			this.remoteMysqlPort = Configuration.getInt(index, "mysql.port");
+			this.remoteMysqlId = Configuration.getString(index, "mysql.id");
+			this.remoteMysqlPwd = Configuration.getString(index, "mysql.pwd");
+		}
+		else if(executeType.equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_COMMAND)) {
+			this.commandLine = Configuration.getList(index, "command.line");
+		}
+		else {
+			ExceptionHandler.exception(MsgCodeException.MSG_TYPE_CONFIGURATION, MsgCodeException.MSG_CODE_WRONG_EXECUTE_TYPE, Configuration.getEnvMap(index).toString());
+		}
 	}
 	
-	public boolean checkSshPort() {
-		boolean result = false;
-		Socket socket = null;
-		try {
+//	public boolean checkSshPort() {
+//		boolean result = false;
+//		Socket socket = null;
+//		try {
 //			socket = new Socket("localhost", this.LOCAL_OPEN_PORT);
 //			socket.setSoLinger(true, 0);	// Disallow "TIME_WAIT" status of TCP
 //			logger.info(this.MAGENTO_RUN_ENV + " -- SSH PORT CHECKING : [" + this.LOCAL_OPEN_PORT + "] is not opened!");
-		}catch (Exception e) {
+//		}catch (Exception e) {
 //			logger.info("SSH PORT CHECKING : [" + this.LOCAL_OPEN_PORT + "] is not opened!");
-			result = true;
-		}finally {
-			try {
-				if(socket != null)
-					socket.close();
-			} catch (Exception e) {
-				logger.error("Exception in closing TCP socket : " + e.toString());
-			
-			}
-		}
-		return result;
-	}
-	
-	public void openSshPort() {
-		try {
-			JSch jsch = new JSch();
-			
+//			result = true;
+//		}finally {
+//			try {
+//				if(socket != null)
+//					socket.close();
+//			} catch (Exception e) {
+//				logger.error("Exception in closing TCP socket : " + e.toString());
+//			
+//			}
+//		}
+//		return result;
+//	}
+//	
+//	public void openSshPort() {
+//		try {
+//			JSch jsch = new JSch();
+//			
 //			logger.info(this.MAGENTO_RUN_ENV + " -- TRY TO OPEN PORT : " + this.LOCAL_OPEN_PORT);
 //			
 //			Session session = jsch.getSession(this.MAGENTO_RUN_ENV_SSH_USER, this.MAGENTO_CLOUD_HOST, this.MAGENTO_CLOUD_PORT);
@@ -75,10 +90,10 @@ public class OpenSshTunneling {
 //					+ "\n- SSH HOST : " + this.MAGENTO_CLOUD_HOST
 //					+ "\n- SSH PORT : " + this.MAGENTO_CLOUD_PORT
 //					);
-			
-			Properties config = new Properties();
-			config.put("StrictHostKeyChecking", "no");
-			config.put("ConnectionAttempts", "3");
+//			
+//			Properties config = new Properties();
+//			config.put("StrictHostKeyChecking", "no");
+//			config.put("ConnectionAttempts", "3");
 //			session.setConfig(config);
 //			
 //			session.connect();
@@ -91,9 +106,9 @@ public class OpenSshTunneling {
 //			logger.info("SSH Tunneling - Port Forward (Local -> Destination) : "
 //					+ "localhost/" + this.LOCAL_OPEN_PORT + " -> "
 //					+ this.MAGENTO_MYSQL_HOST + "/" + this.MAGENTO_MYSQL_PORT);
-			logger.info("Success to open SSH Tunneling !");
-		}catch (Exception e) {
-			logger.error("Exception in opening SSH tunneling : " + e.toString());
-		}
-	}
+//			logger.info("Success to open SSH Tunneling !");
+//		}catch (Exception e) {
+//			logger.error("Exception in opening SSH tunneling : " + e.toString());
+//		}
+//	}
 }
