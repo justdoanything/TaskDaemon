@@ -3,7 +3,7 @@ export LANG=ko_KR.eucKR
 
 ## main file
 MAIN_JAR=watcher_ssh_tunneling_v1.0.jar
-CONTEXT=conf/context.properties
+CONTEXT=
 
 PID=$(ps x | grep $CONTEXT | grep -v grep | aws '/java/ {print $1}')
 
