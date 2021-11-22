@@ -5,7 +5,7 @@ import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 
-import com.yong.common.Configuration;
+import com.yong.msg.MsgCodeException;
 import com.yong.ssh.OpenSshTunneling;
 
 public class ExecuteTimer implements Runnable {
@@ -21,27 +21,26 @@ public class ExecuteTimer implements Runnable {
 	
 	@Override
 	public void run() {
-//		try {
+		try {
 			// Set time interval to run this program
-//			fileDelay = Configuration.getInt(MsgCode.CONF_KEY_TIME_INTERVAL);
+			fileDelay = ost.getExecuteInterval();
 			
-//			logger.info(String.format("Time Interval Delay : %d (ms)", fileDelay));
-//			
-//			// Running the program every "fileDelay (ms)"
-//			new Timer().schedule(new TimerTask() {
-//				
-//				@Override
-//				public void run() {
-//					try {
-//						if(ost != null && ost.checkSshPort())
-//							ost.openSshPort();
-//					}catch (Exception e) {
-//						logger.error("Exception in opening SSH : " + e.toString());
-//					}
-//				}
-//			}, 1000, fileDelay);
-//		}catch (Exception e) {
-//			logger.error("Exception in Runnable : " + e.toString());
-//		}
+			logger.info(String.format("[" + ost.getEnv() + "] Time Interval Delay : %d (ms)", fileDelay));
+			
+			// Running the program every "fileDelay (ms)"
+			new Timer().schedule(new TimerTask() {
+				@Override
+				public void run() {
+					try {
+						if(ost != null && ost.checkSshPort())
+							ost.openSshPort();
+					}catch (Exception e) {
+						logger.error("[" + ost.getEnv() + MsgCodeException.MSG_CODE_SSH_NOT_OPEN_MSG + " : " + e.toString());
+					}
+				}
+			}, 1000, fileDelay);
+		}catch (Exception e) {
+			logger.error("[" + ost.getEnv() + MsgCodeException.MSG_CODE_RUNNABLE_NOT_RUN_MSG + " : " + e.toString());
+		}
 	}
 }

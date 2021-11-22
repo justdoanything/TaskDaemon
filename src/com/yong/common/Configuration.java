@@ -18,7 +18,7 @@ import com.yong.util.CommonUtil;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class Configuration {
 
-	private static final Logger logger =  Logger.getLogger(Configuration.class);
+	private static Logger logger =  null;
 	private final static List<Map<String, Object>> envListMap = new ArrayList<>();
 	
 	/**
@@ -30,14 +30,15 @@ public class Configuration {
 	public static void initialize() throws Exception {
 		try {
 			PropertyConfigurator.configure(MsgCodeConfiguration.MSG_VALUE_PATH_LOG4J);
+			logger =  Logger.getLogger(Configuration.class);
 			logger.info("Complete to load log4j properties file from " + MsgCodeConfiguration.MSG_VALUE_PATH_LOG4J);
 			logger.info("Trying to parse application.yml to start this program!");
 			parseApplicationYml();
-			logger.info("Complete to load application.yml!");
+			logger.info("Complete to load application.yml from " + MsgCodeConfiguration.MSG_VALUE_PATH_APPLICATION);
 			logger.debug("application.yml was parsed to List<Map> : " + envListMap.toString());
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error("There is a exception in progress : " + e.toString());
+			logger.error(MsgCodeException.MSG_CODE_INITIAL_APPLICATION_ERROR_MSG + " : " + e.getMessage());
 			ExceptionHandler.exception(MsgCodeException.MSG_TYPE_CONFIGURATION, MsgCodeException.MSG_CODE_INITIAL_APPLICATION_ERROR, e.toString());
 		}
 	}
@@ -53,22 +54,26 @@ public class Configuration {
 		try {
 			Map<String, Object> yml = new Yaml().load(new FileReader(MsgCodeConfiguration.MSG_VALUE_PATH_APPLICATION));
 			List envListBean = (List) ((Map) yml.get(MsgCodeConfiguration.MSG_WORD_KEY_ENVIRONMENT)).get(MsgCodeConfiguration.MSG_WORD_KEY_ENVLIST);
-			logger.info("There is " + envListBean.size() + " environment in application.yml");
+			if(envListBean.size() == 1) {
+				logger.info("There is a environment in application.yml");
+			}else {
+				logger.info("There are " + envListBean.size() + " environments in application.yml");
+			}
 			
 			int index = 0;
 			for(Object env : envListBean) {
-				logger.info(MsgCodeConfiguration.MSG_WORD_KEY_ENV + index + " : " + env.toString());
+				logger.info(CommonUtil.ObjToMap(env).get(MsgCodeConfiguration.MSG_WORD_KEY_ENV).toString() + " : " + env.toString());
 				envListMap.add(new HashMap<>());
 				createYmlToMap(env, envListMap.get(index));
 				index++;
 			}
 		}catch (FileNotFoundException e) { 
 			e.printStackTrace(); 
-			logger.error("There is a fileNotFoundException in progress : " + e.toString());
+			logger.error(MsgCodeException.MSG_CODE_FILE_NOT_FOUND_MSG + " : " + e.toString());
 			ExceptionHandler.exception(MsgCodeException.MSG_TYPE_CONFIGURATION, MsgCodeException.MSG_CODE_FILE_NOT_FOUND, e.toString());
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.error("There is a exception in progress : " + e.toString());
+			logger.error(MsgCodeException.MSG_CODE_PARESE_APPLICATION_ERROR_MSG + " : " + e.toString());
 			ExceptionHandler.exception(MsgCodeException.MSG_TYPE_CONFIGURATION, MsgCodeException.MSG_CODE_PARESE_APPLICATION_ERROR, e.toString());
 		}
 	}
