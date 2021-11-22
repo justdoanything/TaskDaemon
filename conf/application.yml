@@ -1,6 +1,7 @@
 environment:
   envList:
     - env: prod
+      time: 60000
       local:
         port: 3000
       remote:

@@ -1,6 +1,7 @@
 package com.yong.runner;
 
 import com.yong.common.Configuration;
+import com.yong.ssh.OpenSshTunneling;
 
 public class Executor {
 
@@ -8,8 +9,13 @@ public class Executor {
 		try {
 			Configuration config = new Configuration();
 			config.initialize();
+			
+			for(int index = 0; index < config.getEnvListSize(); index++) {
+				OpenSshTunneling ost = new OpenSshTunneling(null);
+				Runnable runnable = new ExecuteTimer(ost);
+				runnable.run();
+			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

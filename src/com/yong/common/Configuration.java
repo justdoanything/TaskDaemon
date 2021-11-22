@@ -2,6 +2,7 @@ package com.yong.common;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ import com.yong.util.CommonUtil;
 public class Configuration {
 
 	private final Logger logger =  Logger.getLogger(Configuration.class);
-	private final static Map<String, Object> envListMap = new HashMap<>();
+	private final static List<Map<String, Object>> envListMap = new ArrayList<>();
 	
 	/**
 	 * @author yongwoo
@@ -41,25 +42,28 @@ public class Configuration {
 	 * @implNote Parseing application.yml to envListMap
 	 *           (This is like @Value from SpringBoot)
 	 */
-	private void parseApplicationYml() {
+	private void parseApplicationYml() throws Exception {
 		try {
 			Map<String, Object> yml = new Yaml().load(new FileReader(MsgCodeConfiguration.MSG_VALUE_PATH_APPLICATION));
-			List envList = (List) ((Map) yml.get("environment")).get("envList");
-			logger.info("There is " + envList.size() + " environment in application.yml");
+			List envListBean = (List) ((Map) yml.get(MsgCodeConfiguration.MSG_WORD_KEY_ENVIRONMENT)).get(MsgCodeConfiguration.MSG_WORD_KEY_ENVLIST);
+			logger.info("There is " + envListBean.size() + " environment in application.yml");
 			
 			int index = 0;
-			
-			for(Object env : envList) {
-				logger.info("env" + index++ + " : " + env.toString());
-				this.createYmlToMap(env, envListMap);
+			for(Object env : envListBean) {
+				logger.info(MsgCodeConfiguration.MSG_WORD_KEY_ENV + index + " : " + env.toString());
+				envListMap.add(new HashMap<>());
+				this.createYmlToMap(env, envListMap.get(index));
+				index++;
 			}
 			
 		}catch (FileNotFoundException e) { 
 			e.printStackTrace(); 
 			logger.error("There is a fileNotFoundException in progress : " + e.toString());
+			throw new FileNotFoundException(e.toString());
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error("There is a exception in progress : " + e.toString());
+			throw new Exception(e);
 		}
 	}
 	
@@ -69,8 +73,8 @@ public class Configuration {
 	 * @category Configuration
 	 * @implNote Create envListMap from application.yml
 	 */
-	private void createYmlToMap(Object env, Map<String, Object> envListMap) {
-		this.doDepthFirstSearch(env, CommonUtil.ObjToString(((Map) env).get("env")), envListMap);
+	private void createYmlToMap(Object env, Map<String, Object> envListMap) throws Exception {
+		this.doDepthFirstSearch(env, CommonUtil.ObjToString(((Map) env).get(MsgCodeConfiguration.MSG_WORD_KEY_ENV)), envListMap);
 	}
 	
 	/**
@@ -79,7 +83,7 @@ public class Configuration {
 	 * @category Configuration
 	 * @implNote Create envListMap from application.yml with DFS searching argorithm 
 	 */
-	private void doDepthFirstSearch(Object env, String parentKey, Map<String, Object> envListMap) {
+	private void doDepthFirstSearch(Object env, String parentKey, Map<String, Object> envListMap) throws Exception {
 		Map<String, Object> obj = CommonUtil.ObjToMap(env);
 		
 		for(String key : obj.keySet()) {
@@ -108,8 +112,8 @@ public class Configuration {
 	 * @category Configuration
 	 * @implNote Get String Object from envListMap 
 	 */
-	public static String getString(String key) {
-		return CommonUtil.ObjToString(envListMap.get(key));
+	public static String getString(int index, String key) throws Exception {
+		return CommonUtil.ObjToString(envListMap.get(index).get(key));
 	}
 	
 	/**
@@ -118,7 +122,11 @@ public class Configuration {
 	 * @category Configuration
 	 * @implNote Get List Object from envListMap 
 	 */
-	public static List getList(String key) {
-		return CommonUtil.ObjToList(envListMap.get(key));
+	public static List getList(int index, String key) throws Exception {
+		return CommonUtil.ObjToList(envListMap.get(index).get(key));
+	}
+	
+	public int getEnvListSize() throws Exception {
+		return envListMap.size();
 	}
 }
