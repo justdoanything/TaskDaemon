@@ -23,3 +23,7 @@
 hs_err_pid*
 /bin/
 /log/
+
+# exclude test file
+/conf/private_key/private.ppk
+/conf/application-test.yml
