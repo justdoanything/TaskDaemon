@@ -25,5 +25,5 @@ hs_err_pid*
 /log/
 
 # exclude test file
-/conf/private_key/private.ppk
+/conf/private_key/private-test.ppk
 /conf/application-test.yml
