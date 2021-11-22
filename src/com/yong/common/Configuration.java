@@ -18,7 +18,13 @@ public class Configuration {
 
 	private final Logger logger =  Logger.getLogger(Configuration.class);
 	private final static Map<String, Object> envListMap = new HashMap<>();
-		
+	
+	/**
+	 * @author yongwoo
+	 * @throws Exception
+	 * @category Configuration
+	 * @implNote Initialize context file when this program started.
+	 */
 	public void initialize() throws Exception {
 			PropertyConfigurator.configure(MsgCodeConfiguration.MSG_VALUE_PATH_LOG4J);
 			logger.info("Complete to load log4j properties file from " + MsgCodeConfiguration.MSG_VALUE_PATH_LOG4J);
@@ -28,6 +34,13 @@ public class Configuration {
 			logger.debug("application map : " + envListMap.toString());
 	}
 	
+	/**
+	 * @author yongwoo
+	 * @throws FileNotFoundException, Exception
+	 * @category Configuration
+	 * @implNote Parseing application.yml to envListMap
+	 *           (This is like @Value from SpringBoot)
+	 */
 	private void parseApplicationYml() {
 		try {
 			Map<String, Object> yml = new Yaml().load(new FileReader(MsgCodeConfiguration.MSG_VALUE_PATH_APPLICATION));
@@ -43,42 +56,68 @@ public class Configuration {
 			
 		}catch (FileNotFoundException e) { 
 			e.printStackTrace(); 
+			logger.error("There is a fileNotFoundException in progress : " + e.toString());
+		}catch (Exception e) {
+			e.printStackTrace();
 			logger.error("There is a exception in progress : " + e.toString());
-		}	
+		}
 	}
 	
+	/**
+	 * @author yongwoo
+	 * @throws
+	 * @category Configuration
+	 * @implNote Create envListMap from application.yml
+	 */
 	private void createYmlToMap(Object env, Map<String, Object> envListMap) {
 		this.doDepthFirstSearch(env, CommonUtil.ObjToString(((Map) env).get("env")), envListMap);
 	}
 	
-	
+	/**
+	 * @author yongwoo
+	 * @throws 
+	 * @category Configuration
+	 * @implNote Create envListMap from application.yml with DFS searching argorithm 
+	 */
 	private void doDepthFirstSearch(Object env, String parentKey, Map<String, Object> envListMap) {
 		Map<String, Object> obj = CommonUtil.ObjToMap(env);
 		
 		for(String key : obj.keySet()) {
 			if(CommonUtil.mapOrNot(obj.get(key))) {
-				// 부모 Key 만들기
+				// Create parentKey
 				parentKey += "." + key;
 				
-				// 자식 node 탐색
+				// Search child node
 				doDepthFirstSearch(obj.get(key), parentKey, envListMap);
 				
-				// 자식 node 탐색 끝
+				// End to search child node
 				parentKey = parentKey.replace("." + key, "");
 				
 			} else {
-				// 부모 node 탐색 끝
+				// End to search parent node
 				String configKey = parentKey + "." + key;
-				logger.debug(configKey + " : " + obj.get(key).toString());
 				envListMap.put(configKey, obj.get(key));
+				logger.debug(configKey + " : " + obj.get(key).toString());
 			}
 		}
 	}
 	
+	/**
+	 * @author yongwoo
+	 * @throws 
+	 * @category Configuration
+	 * @implNote Get String Object from envListMap 
+	 */
 	public static String getString(String key) {
 		return CommonUtil.ObjToString(envListMap.get(key));
 	}
 	
+	/**
+	 * @author yongwoo
+	 * @throws 
+	 * @category Configuration
+	 * @implNote Get List Object from envListMap 
+	 */
 	public static List getList(String key) {
 		return CommonUtil.ObjToList(envListMap.get(key));
 	}
