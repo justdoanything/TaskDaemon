@@ -15,10 +15,22 @@ public class ExecuteTimer implements Runnable {
 	
 	OpenSshTunneling ost = null;
 	
+	/**
+	 * @author yongwoo
+	 * @throws Exception
+	 * @category Execute
+	 * @implNote Set ssh class you want to execute
+	 */
 	public ExecuteTimer(OpenSshTunneling ost) {
 		this.ost = ost;
 	}
 	
+	/**
+	 * @author yongwoo
+	 * @throws Exception
+	 * @category Execute
+	 * @implNote Execute ssh class at intervals
+	 */
 	@Override
 	public void run() {
 		try {

@@ -6,6 +6,12 @@ import com.yong.msg.MsgCodeException;
 
 public class ExceptionHandler {
 
+	/**
+	 * @author yongwoo
+	 * @throws Exception
+	 * @category Exception
+	 * @implNote Handler exception type, code, message
+	 */
 	public static void exception(String type, String code, String message) throws Exception {
 		
 		if(type.equals(MsgCodeException.MSG_TYPE_CONFIGURATION)) {

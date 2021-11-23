@@ -34,6 +34,12 @@ public class OpenSshTunneling {
 	
 	private List remoteCommandLine;
 	
+	/**
+	 * @author yongwoo
+	 * @throws Exception
+	 * @category SSH
+	 * @implNote Getter/Setter
+	 */
 	public String getEnv() {
 		return this.env;
 	}
@@ -42,7 +48,12 @@ public class OpenSshTunneling {
 		return this.executeInterval;
 	}
 	
-	
+	/**
+	 * @author yongwoo
+	 * @throws Exception
+	 * @category SSH
+	 * @implNote Set this class values from Configuration class
+	 */
 	public OpenSshTunneling(int index) throws Exception {
 		
 		logger.info("Trying to set the values for (" + Configuration.getString(index, "env") + ") : " + Configuration.getEnvMap(index).toString());
@@ -82,6 +93,12 @@ public class OpenSshTunneling {
 		}
 	}
 	
+	/**
+	 * @author yongwoo
+	 * @throws Exception
+	 * @category SSH
+	 * @implNote Checking port you want to open in your local.
+	 */
 	public boolean checkSshPort() throws Exception {
 		boolean result = false;
 		Socket socket = null;
@@ -104,6 +121,12 @@ public class OpenSshTunneling {
 		return result;
 	}
 
+	/**
+	 * @author yongwoo
+	 * @throws Exception
+	 * @category SSH
+	 * @implNote Open your local port and ssh tunneling
+	 */
 	public void openSshPort() throws Exception {
 		try {
 			JSch jsch = new JSch();
