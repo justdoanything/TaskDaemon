@@ -3,14 +3,14 @@ package com.yong.runner;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.apache.log4j.Logger;
-
+import com.yong.common.Configuration;
+import com.yong.common.LoggingHandler;
 import com.yong.msg.MsgCodeException;
 import com.yong.ssh.OpenSshTunneling;
 
 public class ExecuteTimer implements Runnable {
 
-	Logger logger = Logger.getLogger(this.getClass());
+	LoggingHandler logger = new LoggingHandler(this.getClass(), Configuration.loggerUse);
 	private int fileDelay = 60 * 1000; // default : 60s
 	
 	OpenSshTunneling ost = null;
@@ -35,7 +35,7 @@ public class ExecuteTimer implements Runnable {
 						if(ost != null && ost.checkSshPort())
 							ost.openSshPort();
 					}catch (Exception e) {
-						logger.error("[" + ost.getEnv() + MsgCodeException.MSG_CODE_SSH_NOT_OPEN_MSG + " : " + e.toString());
+						logger.error("[" + ost.getEnv() + "]" + MsgCodeException.MSG_CODE_SSH_NOT_OPEN_MSG + " : " + e.toString());
 					}
 				}
 			}, 1000, fileDelay);

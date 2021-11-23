@@ -1,4 +1,7 @@
 environment:
+  logger:
+    path: ./conf/log4j.properties
+    use: Y   # must set "Y" if you want to use
   envList:
     - env: prod
       execute:

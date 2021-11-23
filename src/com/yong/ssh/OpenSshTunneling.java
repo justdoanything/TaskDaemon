@@ -4,12 +4,11 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
-
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 import com.yong.common.Configuration;
 import com.yong.common.ExceptionHandler;
+import com.yong.common.LoggingHandler;
 import com.yong.msg.MsgCodeConfiguration;
 import com.yong.msg.MsgCodeException;
 import com.yong.msg.MsgCodeSocket;
@@ -17,7 +16,7 @@ import com.yong.msg.MsgCodeSocket;
 @SuppressWarnings("rawtypes")
 public class OpenSshTunneling {
 
-	Logger logger = Logger.getLogger(this.getClass());
+	LoggingHandler logger = new LoggingHandler(this.getClass(), Configuration.loggerUse);
 	
 	private String env;
 	private int executeInterval;

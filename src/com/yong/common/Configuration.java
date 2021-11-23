@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.yaml.snakeyaml.Yaml;
 
+import com.yong.msg.MsgCode;
 import com.yong.msg.MsgCodeConfiguration;
 import com.yong.msg.MsgCodeException;
 import com.yong.util.CommonUtil;
@@ -18,7 +18,8 @@ import com.yong.util.CommonUtil;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class Configuration {
 
-	private static Logger logger =  null;
+	public static String loggerUse = MsgCode.MSG_FLAG_NO;
+	private static LoggingHandler logger = null;
 	private final static List<Map<String, Object>> envListMap = new ArrayList<>();
 	
 	/**
@@ -29,10 +30,6 @@ public class Configuration {
 	 */
 	public static void initialize() throws Exception {
 		try {
-			PropertyConfigurator.configure(MsgCodeConfiguration.MSG_VALUE_PATH_LOG4J);
-			logger =  Logger.getLogger(Configuration.class);
-			logger.info("Complete to load log4j properties file from " + MsgCodeConfiguration.MSG_VALUE_PATH_LOG4J);
-			logger.info("Trying to parse application.yml to start this program!");
 			parseApplicationYml();
 			logger.info("Complete to load application.yml from " + MsgCodeConfiguration.MSG_VALUE_PATH_APPLICATION);
 			logger.debug("application.yml was parsed to List<Map> : " + envListMap.toString());
@@ -53,6 +50,18 @@ public class Configuration {
 	private static void parseApplicationYml() throws Exception {
 		try {
 			Map<String, Object> yml = new Yaml().load(new FileReader(MsgCodeConfiguration.MSG_VALUE_PATH_APPLICATION));
+			
+			// Read logger (You must set use → Y)
+			Map<String, String> loggerMap = CommonUtil.ObjToMap(CommonUtil.ObjToMap(yml.get(MsgCodeConfiguration.MSG_WORD_KEY_ENVIRONMENT)).get(MsgCodeConfiguration.MSG_WORD_KEY_LOGGER));
+			String loggerPath = loggerMap.get(MsgCodeConfiguration.MSG_WORD_KEY_LOGGER_PATH);
+			loggerUse = loggerMap.get(MsgCodeConfiguration.MSG_WORD_KEY_LOGGER_USE);
+			
+			// Set Logger
+			PropertyConfigurator.configure(loggerPath);
+			logger =  new LoggingHandler(Configuration.class, loggerUse);
+			logger.info("Complete to load log4j properties file from " + loggerPath);
+			
+			// Read envList
 			List envListBean = (List) ((Map) yml.get(MsgCodeConfiguration.MSG_WORD_KEY_ENVIRONMENT)).get(MsgCodeConfiguration.MSG_WORD_KEY_ENVLIST);
 			if(envListBean.size() == 1) {
 				logger.info("There is a environment in application.yml");
@@ -60,6 +69,7 @@ public class Configuration {
 				logger.info("There are " + envListBean.size() + " environments in application.yml");
 			}
 			
+			// Set envList values
 			int index = 0;
 			for(Object env : envListBean) {
 				logger.info(CommonUtil.ObjToMap(env).get(MsgCodeConfiguration.MSG_WORD_KEY_ENV).toString() + " : " + env.toString());
