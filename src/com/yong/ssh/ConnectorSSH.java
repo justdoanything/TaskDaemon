@@ -11,12 +11,12 @@ import com.yong.common.ExceptionHandler;
 import com.yong.common.LoggingHandler;
 import com.yong.msg.MsgCodeConfiguration;
 import com.yong.msg.MsgCodeException;
-import com.yong.msg.MsgCodeSocket;
+import com.yong.msg.MsgCodeSsh;
 
-@SuppressWarnings("rawtypes")
-public class OpenSshTunneling {
+@SuppressWarnings("unchecked")
+public class ConnectorSSH {
 
-	LoggingHandler logger = new LoggingHandler(this.getClass(), Configuration.loggerUse);
+	private LoggingHandler logger = new LoggingHandler(this.getClass(), Configuration.loggerUse);
 	
 	private String env;
 	private int executeInterval;
@@ -32,7 +32,7 @@ public class OpenSshTunneling {
 	private String remoteMysqlHost;
 	private int remoteMysqlPort;
 	
-	private List remoteCommandLine;
+	private List<String> remoteCommandLine;
 	
 	/**
 	 * @author yongwoo
@@ -44,17 +44,24 @@ public class OpenSshTunneling {
 		return this.env;
 	}
 
+	public String getExecuteType() {
+		return this.executeType;
+	}
 	public int getExecuteInterval() {
 		return this.executeInterval;
 	}
 	
+	public List<String> getRemoteCommandLine() {
+		return remoteCommandLine;
+	}
+
 	/**
 	 * @author yongwoo
 	 * @throws Exception
 	 * @category SSH
 	 * @implNote Set this class values from Configuration class
 	 */
-	public OpenSshTunneling(int index) throws Exception {
+	public ConnectorSSH(int index) throws Exception {
 		
 		logger.info("Trying to set the values for (" + Configuration.getString(index, "env") + ") : " + Configuration.getEnvMap(index).toString());
 		
@@ -77,15 +84,19 @@ public class OpenSshTunneling {
 		logger.debug("[" + env + "] Complete to set remoteKey : " + this.remoteKey);
 		logger.debug("[" + env + "] Complete to set remoteName : " + this.remoteName);
 		
+		// Set id/pwd for mysql if execute.type is mysql
 		if(executeType.equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_MYSQL)) {
 			this.remoteMysqlHost = Configuration.getString(index, "remote.mysql.host");
 			this.remoteMysqlPort = Configuration.getInt(index, "remote.mysql.port");
 			logger.debug("[" + env + "] Complete to set remoteMysqlHost : " + this.remoteMysqlHost);
 			logger.debug("[" + env + "] Complete to set remoteMysqlPort : " + this.remoteMysqlPort);
 		}
+		// Set command list for command if there is command.line
 		else if(executeType.equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_COMMAND)) {
-			this.remoteCommandLine = Configuration.getList(index, "remote.command.line");
-			logger.debug("[" + env + "] Complete to set remoteCommandLine : " + this.remoteCommandLine);
+			if(Configuration.getList(index, "remote.command.line") != null) {
+				this.remoteCommandLine = Configuration.getList(index, "remote.command.line");
+				logger.debug("[" + env + "] Complete to set remoteCommandLine : " + this.remoteCommandLine);
+			}
 		}
 		else {
 			logger.error(MsgCodeException.MSG_CODE_WRONG_EXECUTE_TYPE_MSG + " [env : " + this.env + " / execute.type : " + this.executeType + ")\n" + Configuration.getEnvMap(index).toString());
@@ -103,7 +114,7 @@ public class OpenSshTunneling {
 		boolean result = false;
 		Socket socket = null;
 		try {
-			socket = new Socket(MsgCodeSocket.MSG_WORD_OPEN_HOST, this.localPort);
+			socket = new Socket(MsgCodeSsh.MSG_WORD_OPEN_HOST, this.localPort);
 			socket.setSoLinger(true, 0);	// Disallow "TIME_WAIT" status of TCP
 			logger.info("[" + this.env + "] CHECKING LOCAL PORT : [" + this.localPort + "] is already opened!");
 		}catch (Exception e) {
@@ -127,13 +138,14 @@ public class OpenSshTunneling {
 	 * @category SSH
 	 * @implNote Open your local port and ssh tunneling
 	 */
-	public void openSshPort() throws Exception {
+	public Session openSshPort() throws Exception {
+		Session session = null;
 		try {
 			JSch jsch = new JSch();
 			
 			logger.info("[" + this.env + "] TRY TO OPEN SSH : " + this.localPort);
 			
-			Session session = jsch.getSession(this.remoteName, this.remoteHost, this.remotePort);
+			session = jsch.getSession(this.remoteName, this.remoteHost, this.remotePort);
 			jsch.addIdentity(this.remoteKey);
 			logger.info("[" + this.env + "] SSH Connection Information : "
 					+ "\n- SSH ENV : " + this.env
@@ -149,18 +161,23 @@ public class OpenSshTunneling {
 			
 			session.connect();
 			logger.info("[" + this.env + "] Success to create SSH Session !");
-			logger.info("[" + this.env + "] TRY TO OPEN SSH TUNNELING !");
-			session.setPortForwardingL(
-					this.localPort,
-					this.remoteMysqlHost,
-					this.remoteMysqlPort);
-			logger.info("[" + this.env + "] SSH Tunneling - Port Forward (Local -> Destination) : "
-					+ MsgCodeSocket.MSG_WORD_OPEN_HOST +"/" + this.localPort + " -> "
-					+ this.remoteMysqlHost + "/" + this.remoteMysqlPort);
-			logger.info("[" + this.env + "] Success to open SSH Tunneling !");
+			
+			if(!this.executeType.equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_COMMAND)) {
+				logger.info("[" + this.env + "] TRY TO OPEN SSH TUNNELING !");
+				session.setPortForwardingL(
+						this.localPort,
+						this.remoteMysqlHost,
+						this.remoteMysqlPort);
+				logger.info("[" + this.env + "] SSH Tunneling - Port Forward (Local -> Destination) : "
+						+ MsgCodeSsh.MSG_WORD_OPEN_HOST +"/" + this.localPort + " -> "
+						+ this.remoteMysqlHost + "/" + this.remoteMysqlPort);
+				logger.info("[" + this.env + "] Success to open SSH Tunneling !");
+			}
+			
 		}catch (Exception e) {
 			logger.error(MsgCodeException.MSG_CODE_TUNNELING_NOT_OPEN_MSG + " : " + e.toString());
 			ExceptionHandler.exception(MsgCodeException.MSG_TYPE_SSH, MsgCodeException.MSG_CODE_TUNNELING_NOT_OPEN, e.toString());
 		}
+		return session;
 	}
 }

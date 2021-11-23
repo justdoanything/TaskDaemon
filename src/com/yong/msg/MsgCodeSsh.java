@@ -1,5 +1,5 @@
 package com.yong.msg;
 
-public class MsgCodeSocket {
+public class MsgCodeSsh {
 	public static final String MSG_WORD_OPEN_HOST = "localhost";
 }

@@ -3,17 +3,20 @@ package com.yong.runner;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.jcraft.jsch.Session;
 import com.yong.common.Configuration;
 import com.yong.common.LoggingHandler;
+import com.yong.msg.MsgCodeConfiguration;
 import com.yong.msg.MsgCodeException;
-import com.yong.ssh.OpenSshTunneling;
+import com.yong.ssh.ExecutorCommand;
+import com.yong.ssh.ConnectorSSH;
 
-public class ExecuteTimer implements Runnable {
+public class ExecutorTimer implements Runnable {
 
-	LoggingHandler logger = new LoggingHandler(this.getClass(), Configuration.loggerUse);
+	private LoggingHandler logger = new LoggingHandler(this.getClass(), Configuration.loggerUse);
 	private int fileDelay = 60 * 1000; // default : 60s
 	
-	OpenSshTunneling ost = null;
+	ConnectorSSH ost = null;
 	
 	/**
 	 * @author yongwoo
@@ -21,7 +24,7 @@ public class ExecuteTimer implements Runnable {
 	 * @category Execute
 	 * @implNote Set ssh class you want to execute
 	 */
-	public ExecuteTimer(OpenSshTunneling ost) {
+	public ExecutorTimer(ConnectorSSH ost) {
 		this.ost = ost;
 	}
 	
@@ -44,8 +47,24 @@ public class ExecuteTimer implements Runnable {
 				@Override
 				public void run() {
 					try {
-						if(ost != null && ost.checkSshPort())
-							ost.openSshPort();
+						if(ost != null && ost.checkSshPort()) {
+							Session session = ost.openSshPort();
+							
+							// Checking execute.type = command && there is command.line
+							if(ost.getExecuteType().equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_COMMAND) && ost.getRemoteCommandLine() != null) {
+								String resultCommMsg = "";
+								
+								// Execute commands as remote.command.list
+								for(String command : ost.getRemoteCommandLine()) {
+									resultCommMsg = ExecutorCommand.runCommand(session, command);
+									if(resultCommMsg.length() == 0) {
+										logger.info("[" + ost.getEnv() + "] Result of Command : Empty ");
+									}else {
+										logger.info("[" + ost.getEnv() + "] Result of Command : \n" + resultCommMsg);
+									}
+								}
+							}
+						}
 					}catch (Exception e) {
 						logger.error("[" + ost.getEnv() + "]" + MsgCodeException.MSG_CODE_SSH_NOT_OPEN_MSG + " : " + e.toString());
 					}
