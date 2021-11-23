@@ -44,6 +44,13 @@ public class ExceptionHandler {
 			default:
 				throw new Exception(message);
 			}
+		} else if(type.equals(MsgCodeException.MSG_TYPE_CHANNEL)) {
+			switch(code) {
+			case MsgCodeException.MSG_CODE_COMMAND_NOT_EXECUTE :
+				throw new Exception(MsgCodeException.MSG_CODE_COMMAND_NOT_EXECUTE_MSG + " : " + message);
+			default:
+				throw new Exception(message);
+			}
 		}
 	}
 }

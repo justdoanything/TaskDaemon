@@ -6,13 +6,15 @@ import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.Session;
 import com.yong.common.Configuration;
+import com.yong.common.ExceptionHandler;
 import com.yong.common.LoggingHandler;
+import com.yong.msg.MsgCodeException;
 
-public class ExecutorCommand {
+public class ConnectorChannel {
 	
-	private static LoggingHandler logger = new LoggingHandler(ExecutorCommand.class, Configuration.loggerUse);
+	private static LoggingHandler logger = new LoggingHandler(ConnectorChannel.class, Configuration.loggerUse);
 	
-	public static String runCommand(Session session, String command) {
+	public static String runCommand(Session session, String command) throws Exception {
 		String resultMsg = "";
 		try {
 			Channel channel = session.openChannel("exec");
@@ -35,6 +37,10 @@ public class ExecutorCommand {
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
+			logger.error(MsgCodeException.MSG_CODE_COMMAND_NOT_EXECUTE_MSG + " : " + e.toString());
+			ExceptionHandler.exception(MsgCodeException.MSG_TYPE_CHANNEL, MsgCodeException.MSG_CODE_COMMAND_NOT_EXECUTE_MSG, e.toString());
+		}finally {
+			if(session != null) session.disconnect();
 		}
 		return resultMsg;
 	}

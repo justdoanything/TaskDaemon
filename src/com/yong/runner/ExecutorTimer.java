@@ -8,7 +8,7 @@ import com.yong.common.Configuration;
 import com.yong.common.LoggingHandler;
 import com.yong.msg.MsgCodeConfiguration;
 import com.yong.msg.MsgCodeException;
-import com.yong.ssh.ExecutorCommand;
+import com.yong.ssh.ConnectorChannel;
 import com.yong.ssh.ConnectorSSH;
 
 public class ExecutorTimer implements Runnable {
@@ -56,7 +56,7 @@ public class ExecutorTimer implements Runnable {
 								
 								// Execute commands as remote.command.list
 								for(String command : ost.getRemoteCommandLine()) {
-									resultCommMsg = ExecutorCommand.runCommand(session, command);
+									resultCommMsg = ConnectorChannel.runCommand(session, command);
 									if(resultCommMsg.length() == 0) {
 										logger.info("[" + ost.getEnv() + "] Result of Command : Empty ");
 									}else {
@@ -66,11 +66,13 @@ public class ExecutorTimer implements Runnable {
 							}
 						}
 					}catch (Exception e) {
+						e.printStackTrace();
 						logger.error("[" + ost.getEnv() + "]" + MsgCodeException.MSG_CODE_SSH_NOT_OPEN_MSG + " : " + e.toString());
 					}
 				}
 			}, 1000, fileDelay);
 		}catch (Exception e) {
+			e.printStackTrace();
 			logger.error("[" + ost.getEnv() + MsgCodeException.MSG_CODE_RUNNABLE_NOT_RUN_MSG + " : " + e.toString());
 		}
 	}

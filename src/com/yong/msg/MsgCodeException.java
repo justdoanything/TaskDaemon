@@ -4,6 +4,7 @@ public class MsgCodeException {
 	public static final String MSG_TYPE_CONFIGURATION = "configuration";
 	public static final String MSG_TYPE_SOCKET = "socket";
 	public static final String MSG_TYPE_SSH = "ssh";
+	public static final String MSG_TYPE_CHANNEL = "channel";
 	
 	public static final String MSG_CODE_WRONG_EXECUTE_TYPE = "WET001";
 	public static final String MSG_CODE_WRONG_EXECUTE_TYPE_MSG = "Wrong execute type in application.yml";
@@ -24,5 +25,8 @@ public class MsgCodeException {
 	
 	public static final String MSG_CODE_RUNNABLE_NOT_RUN = "RNR001";
 	public static final String MSG_CODE_RUNNABLE_NOT_RUN_MSG = "There is a exception in running thread";
+	
+	public static final String MSG_CODE_COMMAND_NOT_EXECUTE = "CNE001";
+	public static final String MSG_CODE_COMMAND_NOT_EXECUTE_MSG = "There is a exception in executing commands";
 	
 }

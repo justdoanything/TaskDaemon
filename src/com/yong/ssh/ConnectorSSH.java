@@ -118,6 +118,7 @@ public class ConnectorSSH {
 			socket.setSoLinger(true, 0);	// Disallow "TIME_WAIT" status of TCP
 			logger.info("[" + this.env + "] CHECKING LOCAL PORT : [" + this.localPort + "] is already opened!");
 		}catch (Exception e) {
+			e.printStackTrace();
 			logger.info("[" + this.env + "] CHECKING LOCAL PORT : [" + this.localPort + "] is not opened!");
 			result = true;
 		}finally {
@@ -175,6 +176,7 @@ public class ConnectorSSH {
 			}
 			
 		}catch (Exception e) {
+			e.printStackTrace();
 			logger.error(MsgCodeException.MSG_CODE_TUNNELING_NOT_OPEN_MSG + " : " + e.toString());
 			ExceptionHandler.exception(MsgCodeException.MSG_TYPE_SSH, MsgCodeException.MSG_CODE_TUNNELING_NOT_OPEN, e.toString());
 		}
