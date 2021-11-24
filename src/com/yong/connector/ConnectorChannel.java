@@ -1,13 +1,13 @@
-package com.yong.ssh;
+package com.yong.connector;
 
 import java.io.InputStream;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.Session;
-import com.yong.common.Configuration;
-import com.yong.common.ExceptionHandler;
-import com.yong.common.LoggingHandler;
+import com.yong.config.Configuration;
+import com.yong.handler.ExceptionHandler;
+import com.yong.handler.LoggingHandler;
 import com.yong.msg.MsgCodeException;
 
 public class ConnectorChannel {

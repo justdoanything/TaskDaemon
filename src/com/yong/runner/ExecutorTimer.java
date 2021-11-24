@@ -4,12 +4,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.jcraft.jsch.Session;
-import com.yong.common.Configuration;
-import com.yong.common.LoggingHandler;
+import com.yong.config.Configuration;
+import com.yong.connector.ConnectorChannel;
+import com.yong.connector.ConnectorSSH;
+import com.yong.handler.LoggingHandler;
 import com.yong.msg.MsgCodeConfiguration;
 import com.yong.msg.MsgCodeException;
-import com.yong.ssh.ConnectorChannel;
-import com.yong.ssh.ConnectorSSH;
 
 public class ExecutorTimer implements Runnable {
 

@@ -1,7 +1,7 @@
 package com.yong.runner;
 
-import com.yong.common.Configuration;
-import com.yong.ssh.ConnectorSSH;
+import com.yong.config.Configuration;
+import com.yong.connector.ConnectorSSH;
 
 public class Executor {
 	public static void main(String[] args) {

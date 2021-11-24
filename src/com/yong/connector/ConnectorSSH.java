@@ -1,4 +1,4 @@
-package com.yong.ssh;
+package com.yong.connector;
 
 import java.net.Socket;
 import java.util.List;
@@ -6,9 +6,9 @@ import java.util.Properties;
 
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
-import com.yong.common.Configuration;
-import com.yong.common.ExceptionHandler;
-import com.yong.common.LoggingHandler;
+import com.yong.config.Configuration;
+import com.yong.handler.ExceptionHandler;
+import com.yong.handler.LoggingHandler;
 import com.yong.msg.MsgCodeConfiguration;
 import com.yong.msg.MsgCodeException;
 import com.yong.msg.MsgCodeSsh;

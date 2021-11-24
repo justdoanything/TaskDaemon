@@ -1,4 +1,4 @@
-package com.yong.common;
+package com.yong.config;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -10,6 +10,8 @@ import java.util.Map;
 import org.apache.log4j.PropertyConfigurator;
 import org.yaml.snakeyaml.Yaml;
 
+import com.yong.handler.ExceptionHandler;
+import com.yong.handler.LoggingHandler;
 import com.yong.msg.MsgCode;
 import com.yong.msg.MsgCodeConfiguration;
 import com.yong.msg.MsgCodeException;

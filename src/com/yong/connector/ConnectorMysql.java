@@ -1,4 +1,4 @@
-package com.yong.ssh;
+package com.yong.connector;
 
 public class ConnectorMysql {
 
