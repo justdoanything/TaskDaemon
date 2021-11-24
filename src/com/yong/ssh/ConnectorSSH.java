@@ -118,7 +118,6 @@ public class ConnectorSSH {
 			socket.setSoLinger(true, 0);	// Disallow "TIME_WAIT" status of TCP
 			logger.info("[" + this.env + "] CHECKING LOCAL PORT : [" + this.localPort + "] is already opened!");
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.info("[" + this.env + "] CHECKING LOCAL PORT : [" + this.localPort + "] is not opened!");
 			result = true;
 		}finally {
