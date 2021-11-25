@@ -11,7 +11,7 @@ import com.yong.handler.ExceptionHandler;
 import com.yong.handler.LoggingHandler;
 import com.yong.msg.MsgCodeConfiguration;
 import com.yong.msg.MsgCodeException;
-import com.yong.msg.MsgCodeSsh;
+import com.yong.msg.MsgCodeSSH;
 
 @SuppressWarnings("unchecked")
 public class ConnectorSSH {
@@ -114,7 +114,7 @@ public class ConnectorSSH {
 		boolean result = false;
 		Socket socket = null;
 		try {
-			socket = new Socket(MsgCodeSsh.MSG_WORD_OPEN_HOST, this.localPort);
+			socket = new Socket(MsgCodeSSH.MSG_WORD_OPEN_HOST, this.localPort);
 			socket.setSoLinger(true, 0);	// Disallow "TIME_WAIT" status of TCP
 			logger.info("[" + this.env + "] CHECKING LOCAL PORT : [" + this.localPort + "] is already opened!");
 		}catch (Exception e) {
@@ -169,7 +169,7 @@ public class ConnectorSSH {
 						this.remoteMysqlHost,
 						this.remoteMysqlPort);
 				logger.info("[" + this.env + "] SSH Tunneling - Port Forward (Local -> Destination) : "
-						+ MsgCodeSsh.MSG_WORD_OPEN_HOST +"/" + this.localPort + " -> "
+						+ MsgCodeSSH.MSG_WORD_OPEN_HOST +"/" + this.localPort + " -> "
 						+ this.remoteMysqlHost + "/" + this.remoteMysqlPort);
 				logger.info("[" + this.env + "] Success to open SSH Tunneling !");
 			}
