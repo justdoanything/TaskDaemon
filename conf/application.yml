@@ -3,6 +3,7 @@ environment:
     path: ./conf/log4j.properties
     use: Y   # must set "Y" if you want to use
   envList:
+# Type1 : Open ssh tunneling through mysql port
     - env: prod
       execute:
         interval: 30000
@@ -17,6 +18,7 @@ environment:
         mysql: 
           host: 127.0.0.1
           port: 3306
+# Type2 : Open ssh tunneling and execute linux command repeatedly
     - env: stg
       execute:
         interval: 30000
@@ -33,10 +35,11 @@ environment:
             - ls -al
             - pwd
             - lscpu
+# Type3 : Open ssh tunnel and execute query repeatedly
     - env: dev
       execute:
         interval: 60000
-        type: command
+        type: mysql
       local:
         port: 3010
       remote:
@@ -44,8 +47,7 @@ environment:
         host: devRemoteHost
         port: 22
         key: devRemoteKey
-        command:
-          line:
-            - ls -al
-            - pwd
-            - lscpu
+        mysql: 
+          host: 127.0.0.1
+          port: 3306
+          mybatis: ./conf/
