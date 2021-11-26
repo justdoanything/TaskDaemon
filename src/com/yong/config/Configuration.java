@@ -12,7 +12,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import com.yong.handler.ExceptionHandler;
 import com.yong.handler.LoggingHandler;
-import com.yong.msg.MsgCode;
+import com.yong.msg.MsgCodeCommon;
 import com.yong.msg.MsgCodeConfiguration;
 import com.yong.msg.MsgCodeException;
 import com.yong.util.CommonUtil;
@@ -20,7 +20,7 @@ import com.yong.util.CommonUtil;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class Configuration {
 
-	public static String loggerUse = MsgCode.MSG_FLAG_NO;
+	public static String loggerUse = MsgCodeCommon.MSG_FLAG_NO;
 	private static LoggingHandler logger = null;
 	private final static List<Map<String, Object>> envListMap = new ArrayList<>();
 	

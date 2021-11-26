@@ -2,13 +2,13 @@ package com.yong.handler;
 
 import org.apache.log4j.Logger;
 
-import com.yong.msg.MsgCode;
+import com.yong.msg.MsgCodeCommon;
 
 @SuppressWarnings("rawtypes")
 public class LoggingHandler {
 
 	private Logger logger = null;
-	private String loggerUse = MsgCode.MSG_FLAG_NO;
+	private String loggerUse = MsgCodeCommon.MSG_FLAG_NO;
 	
 	/**
 	 * @author yongwoo
@@ -28,7 +28,7 @@ public class LoggingHandler {
 	 * @implNotes Write info log if flag is Y
 	 */
 	public void info(String message) {
-		if(loggerUse.equals(MsgCode.MSG_FLAG_YES))
+		if(loggerUse.equals(MsgCodeCommon.MSG_FLAG_YES))
 			logger.info(message);
 	}
 	
@@ -39,7 +39,7 @@ public class LoggingHandler {
 	 * @implNotes Write error log if flag is Y
 	 */
 	public void error(String message) {
-		if(loggerUse.equals(MsgCode.MSG_FLAG_YES))
+		if(loggerUse.equals(MsgCodeCommon.MSG_FLAG_YES))
 			logger.error(message);
 	}
 	
@@ -50,7 +50,7 @@ public class LoggingHandler {
 	 * @implNotes Write debug log if flag is Y
 	 */
 	public void debug(String message) {
-		if(loggerUse.equals(MsgCode.MSG_FLAG_YES))
+		if(loggerUse.equals(MsgCodeCommon.MSG_FLAG_YES))
 			logger.debug(message);
 	}
 }
