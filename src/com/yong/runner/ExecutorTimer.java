@@ -64,6 +64,11 @@ public class ExecutorTimer implements Runnable {
 									}
 								}
 							}
+							
+							// Checking execute.type = mysql && there is remove.mysql.mybatis
+							if(ost.getExecuteType().equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_MYSQL) && ost.get) {
+								
+							}
 						}
 					}catch (Exception e) {
 						e.printStackTrace();
