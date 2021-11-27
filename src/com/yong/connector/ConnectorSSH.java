@@ -31,6 +31,7 @@ public class ConnectorSSH {
 	
 	private String remoteMysqlHost;
 	private int remoteMysqlPort;
+	private String removeMysqlMybatis;
 	
 	private List<String> remoteCommandLine;
 	
@@ -47,12 +48,17 @@ public class ConnectorSSH {
 	public String getExecuteType() {
 		return this.executeType;
 	}
+	
 	public int getExecuteInterval() {
 		return this.executeInterval;
 	}
 	
 	public List<String> getRemoteCommandLine() {
 		return remoteCommandLine;
+	}
+	
+	public String getRemoveMysqlMybatis() {
+		return removeMysqlMybatis;
 	}
 
 	/**
