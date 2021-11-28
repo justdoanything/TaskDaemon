@@ -1,5 +1,5 @@
-package com.yong.mysql;
+package com.yong.db;
 
-public class MysqlService {
+public class DatabaseService {
 
 }

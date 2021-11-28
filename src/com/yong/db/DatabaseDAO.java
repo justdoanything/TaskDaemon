@@ -1,5 +1,5 @@
-package com.yong.mysql;
+package com.yong.db;
 
-public class MysqlDAO {
+public class DatabaseDAO {
 
 }
