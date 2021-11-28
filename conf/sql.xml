@@ -5,12 +5,13 @@
 
 <mapper namespace="com.yong.db">
      
-    <select id="TEST" resultType="LinkedHashMap" parameterType="map">
-    	<![CDATA[
-			select  *
-			from	table_name a
-			limit 1;
-		]]>
+    <select id="retrieveTestConnect" resultType="DatabaseVO" parameterType="DatabaseVO">
+    	SELECT /* com.yong.db.DatabaseDAO */
+    	#{value1} AS 'value1' 
+    	, #{value2} AS 'value2'
+    	, #{value3} AS 'value3'
+    	FROM DUAL
+    	LIMIT 10;
      </select>
     	
 </mapper>
