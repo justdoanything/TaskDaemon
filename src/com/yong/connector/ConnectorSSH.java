@@ -29,50 +29,93 @@ public class ConnectorSSH {
 	private String remoteKey;
 	private String remoteName;
 	
+	// execute.type = mysql
 	private String remoteMysqlHost;
 	private int remoteMysqlPort;
-	private String remoteMysqlId;
-	private String remoteMysqlPwd;
-	private String remoteMysqlMybatis;
-	
+
+	// execute.type = db
 	private List<String> remoteCommandLine;
+	
+	// execute.type = db
+	private String remoteDbMybatis;
+	private String remoteDbDriver;
+	private String remoteDbUrl;
+	private String remoteDbId;
+	private String remoteDbPwd;
+	private String remoteDbQuery;
 	
 	/**
 	 * @author yongwoo
 	 * @throws Exception
 	 * @category SSH
-	 * @implNote Getter/Setter
+	 * @implNote Getter
 	 */
 	public String getEnv() {
-		return this.env;
+		return env;
 	}
 
 	public int getExecuteInterval() {
-		return this.executeInterval;
+		return executeInterval;
 	}
 
 	public String getExecuteType() {
-		return this.executeType;
+		return executeType;
 	}
-	
+
 	public int getLocalPort() {
 		return localPort;
 	}
-	
+
+	public String getRemoteHost() {
+		return remoteHost;
+	}
+
+	public int getRemotePort() {
+		return remotePort;
+	}
+
+	public String getRemoteKey() {
+		return remoteKey;
+	}
+
+	public String getRemoteName() {
+		return remoteName;
+	}
+
+	public String getRemoteMysqlHost() {
+		return remoteMysqlHost;
+	}
+
+	public int getRemoteMysqlPort() {
+		return remoteMysqlPort;
+	}
+
 	public List<String> getRemoteCommandLine() {
 		return remoteCommandLine;
 	}
-	
-	public String getRemoteMysqlMybatis() {
-		return remoteMysqlMybatis;
+
+	public String getRemoteDbMybatis() {
+		return remoteDbMybatis;
 	}
 
-	public String getRemoteMysqlId() {
-		return remoteMysqlId;
+	public String getRemoteDbDriver() {
+		return remoteDbDriver;
 	}
 
-	public String getRemoteMysqlPwd() {
-		return remoteMysqlPwd;
+	public String getRemoteDbUrl() {
+		return remoteDbUrl;
+	}
+
+	public String getRemoteDbId() {
+		return remoteDbId;
+	}
+
+	public String getRemoteDbPwd() {
+		return remoteDbPwd;
+	}
+
+	public String getRemoteDbQuery() {
+		return remoteDbQuery;
 	}
 
 	/**
@@ -111,19 +154,34 @@ public class ConnectorSSH {
 			logger.debug("[" + env + "] Complete to set remoteMysqlHost : " + this.remoteMysqlHost);
 			logger.debug("[" + env + "] Complete to set remoteMysqlPort : " + this.remoteMysqlPort);
 		}
-		// Set command list for command if there is command.line
+		// Set command list for command if execute.type is command
 		else if(executeType.equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_COMMAND)) {
 			if(Configuration.getList(index, "remote.command.line") != null) {
 				this.remoteCommandLine = Configuration.getList(index, "remote.command.line");
 				logger.debug("[" + env + "] Complete to set remoteCommandLine : " + this.remoteCommandLine);
 			}
 		}
+		// Set properties if execute.type = db
+		else if(executeType.equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_DB)) {
+			this.remoteDbMybatis = Configuration.getString(index, "remote.db.mybatis");
+			this.remoteDbDriver = Configuration.getString(index, "remote.db.drive");
+			this.remoteDbUrl = Configuration.getString(index, "remote.db.url");
+			this.remoteDbId = Configuration.getString(index, "remote.db.id");
+			this.remoteDbPwd = Configuration.getString(index, "remote.db.pwd");
+			this.remoteDbQuery = Configuration.getString(index, "remote.db.query");
+			logger.debug("[" + env + "] Complete to set remoteDbMybatis : " + this.remoteDbMybatis);
+			logger.debug("[" + env + "] Complete to set remoteDbDriver : " + this.remoteDbDriver);
+			logger.debug("[" + env + "] Complete to set remoteDbUrl : " + this.remoteDbUrl);
+			logger.debug("[" + env + "] Complete to set remoteDbId : " + this.remoteDbId);
+			logger.debug("[" + env + "] Complete to set remoteDbPwd : " + this.remoteDbPwd);
+			logger.debug("[" + env + "] Complete to set remoteDbQuery : " + this.remoteDbQuery);
+		}
 		else {
 			logger.error(MsgCodeException.MSG_CODE_WRONG_EXECUTE_TYPE_MSG + " [env : " + this.env + " / execute.type : " + this.executeType + ")\n" + Configuration.getEnvMap(index).toString());
 			ExceptionHandler.exception(MsgCodeException.MSG_TYPE_CONFIGURATION, MsgCodeException.MSG_CODE_WRONG_EXECUTE_TYPE, Configuration.getEnvMap(index).toString());
 		}
 	}
-	
+
 	/**
 	 * @author yongwoo
 	 * @throws Exception
