@@ -56,34 +56,34 @@ public class ExecutorTimer implements Runnable {
 							}
 						} 
 						// Checking execute.type = command && remote.command.line != null
-						else if(connectorSSH != null && connectorSSH.getExecuteType().equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_COMMAND)) {
-							if(connectorSSH.getRemoteCommandLine() != null) {
-								Session session = connectorSSH.openSshPort();
-								String resultCommMsg = "";
+						else if(connectorSSH != null 
+								&& connectorSSH.getExecuteType().equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_COMMAND)
+								&& connectorSSH.getRemoteCommandLine() != null) {
+							Session session = connectorSSH.openSshPort();
+							String resultCommMsg = "";
 
-								// Execute commands as remote.command.list
-								for(String command : connectorSSH.getRemoteCommandLine()) {
-									resultCommMsg = ConnectorChannel.runCommand(session, command);
-									if(resultCommMsg.length() == 0) {
-										logger.info("[" + connectorSSH.getEnv() + "] Result of Command : Empty ");
-									}else {
-										logger.info("[" + connectorSSH.getEnv() + "] Result of Command : \n" + resultCommMsg);
-									}
+							// Execute commands as remote.command.list
+							for(String command : connectorSSH.getRemoteCommandLine()) {
+								resultCommMsg = ConnectorChannel.runCommand(session, command);
+								if(resultCommMsg.length() == 0) {
+									logger.info("[" + connectorSSH.getEnv() + "] Result of Command : Empty ");
+								}else {
+									logger.info("[" + connectorSSH.getEnv() + "] Result of Command : \n" + resultCommMsg);
 								}
 							}
+							if(session != null) session.disconnect();
 						}
 						// Checking execute.type = db && remote.db.mybatis != null
-						else if(connectorSSH.getExecuteType().equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_DB)) {
-							if(connectorSSH.getRemoteDbMybatis() != null) {		
-								
-								// Open ssh tunneling if the local port is not opened
-								if(connectorSSH.checkSshPort()) {
-									connectorSSH.openSshPort();
-								}
-								// Set Mybatis and connect sql factory
-								DatabaseService ds = new DatabaseService(connectorSSH);
-								ds.execute();
+						else if(connectorSSH != null
+								&& connectorSSH.getExecuteType().equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_DB)
+								&& connectorSSH.getRemoteDbMybatis() != null) {
+							// Open ssh tunneling if the local port is not opened
+							if(connectorSSH.checkSshPort()) {
+								connectorSSH.openSshPort();
 							}
+							// Set Mybatis and connect sql factory
+							DatabaseService ds = new DatabaseService(connectorSSH);
+							ds.execute();
 						}
 					}catch (Exception e) {
 						e.printStackTrace();

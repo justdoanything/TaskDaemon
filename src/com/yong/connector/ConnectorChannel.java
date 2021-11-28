@@ -39,8 +39,6 @@ public class ConnectorChannel {
 			e.printStackTrace();
 			logger.error(MsgCodeException.MSG_CODE_COMMAND_NOT_EXECUTE_MSG + " : " + e.toString());
 			ExceptionHandler.exception(MsgCodeException.MSG_TYPE_CHANNEL, MsgCodeException.MSG_CODE_COMMAND_NOT_EXECUTE_MSG, e.toString());
-		}finally {
-			if(session != null) session.disconnect();
 		}
 		return resultMsg;
 	}
