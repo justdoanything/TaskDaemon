@@ -7,6 +7,7 @@ import com.jcraft.jsch.Session;
 import com.yong.config.Configuration;
 import com.yong.connector.ConnectorChannel;
 import com.yong.connector.ConnectorSSH;
+import com.yong.db.DatabaseService;
 import com.yong.handler.LoggingHandler;
 import com.yong.msg.MsgCodeConfiguration;
 import com.yong.msg.MsgCodeException;
@@ -65,13 +66,12 @@ public class ExecutorTimer implements Runnable {
 								}
 							}
 							
-							// Checking execute.type = mysql && there is remote.db.mybatis
-							else if(connectorSSH.getExecuteType().equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_MYSQL) 
+							// Checking execute.type = db && there is remote.db.mybatis
+							else if(connectorSSH.getExecuteType().equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_DB) 
 									&& connectorSSH.getRemoteDbMybatis() != null) {
 								// Set Mybatis and connect sql factory
-								
-								
-								// Run mysql query to tunnel
+								DatabaseService ds = new DatabaseService(connectorSSH);
+								ds.execute();
 							}
 						}
 					}catch (Exception e) {

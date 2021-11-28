@@ -12,21 +12,22 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	<typeAliases>
 		<typeAlias type="java.util.LinkedHashMap" alias="LinkedHashMap"/>
 		<typeAlias type="java.util.ArrayList" alias="ArrayList"/>
+		<typeAlias type="com.yong.db.DatabaseVO" alias="DatabaseVO"/>
 	</typeAliases>
 	
 	<environments default="development">
 		<environment id="development">
 			<transactionManager type="JDBC"/>
 			<dataSource type="POOLED">
-				<property name="driver" value="${driver}"/>
-				<property name="url" value="${url}"/>
-				<property name="username" value="${id}"/>
-				<property name="password" value="${pwd}"/>
+				<property name="driver" value="${db.driver}"/>
+				<property name="url" value="${db.url}"/>
+				<property name="username" value="${db.id}"/>
+				<property name="password" value="${db.pwd}"/>
 			</dataSource>
 		</environment>
 	</environments>
 	
 	<mappers>
-		<mapper url="file:${query}"/>
+		<mapper url="file:${db.query}"/>
 	</mappers>
 </configuration>
