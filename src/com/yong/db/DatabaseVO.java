@@ -3,8 +3,21 @@ package com.yong.db;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class DatabaseVO {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class DatabaseVO {
+	
+	private String value1;
+	private String value2;
+	private String value3;
+	
 	public String toStringDefault() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
     }
@@ -31,5 +44,9 @@ public class DatabaseVO {
 
     public String toStringSimple() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
+    }
+    
+    public String toString() {
+    	return this.toStringJson();
     }
 }

@@ -48,13 +48,19 @@ public class ExecutorTimer implements Runnable {
 				@Override
 				public void run() {
 					try {
-						if(connectorSSH != null && connectorSSH.checkSshPort()) {
-							Session session = connectorSSH.openSshPort();
-							
-							// Checking execute.type = command && there is command.line
-							if(connectorSSH.getExecuteType().equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_COMMAND) && connectorSSH.getRemoteCommandLine() != null) {
+						// Checking execute.type = tunnel
+						if(connectorSSH != null && connectorSSH.getExecuteType().equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_TUNNEL)) {
+							// Just check the port and open ssh tunnel if the port is not opened
+							if(connectorSSH.checkSshPort()) {
+								connectorSSH.openSshPort();
+							}
+						} 
+						// Checking execute.type = command && remote.command.line != null
+						else if(connectorSSH != null && connectorSSH.getExecuteType().equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_COMMAND)) {
+							if(connectorSSH.getRemoteCommandLine() != null) {
+								Session session = connectorSSH.openSshPort();
 								String resultCommMsg = "";
-								
+
 								// Execute commands as remote.command.list
 								for(String command : connectorSSH.getRemoteCommandLine()) {
 									resultCommMsg = ConnectorChannel.runCommand(session, command);
@@ -65,10 +71,15 @@ public class ExecutorTimer implements Runnable {
 									}
 								}
 							}
-							
-							// Checking execute.type = db && there is remote.db.mybatis
-							else if(connectorSSH.getExecuteType().equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_DB) 
-									&& connectorSSH.getRemoteDbMybatis() != null) {
+						}
+						// Checking execute.type = db && remote.db.mybatis != null
+						else if(connectorSSH.getExecuteType().equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_DB)) {
+							if(connectorSSH.getRemoteDbMybatis() != null) {		
+								
+								// Open ssh tunneling if the local port is not opened
+								if(connectorSSH.checkSshPort()) {
+									connectorSSH.openSshPort();
+								}
 								// Set Mybatis and connect sql factory
 								DatabaseService ds = new DatabaseService(connectorSSH);
 								ds.execute();

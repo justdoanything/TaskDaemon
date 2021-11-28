@@ -1,5 +1,10 @@
 package com.yong.msg;
 
-public class MsgCodeMysql {
+public class MsgCodeDatabase {
 
+	public static final String MSG_KEY_CONFIG_DB_DRIVER = "db.driver";
+	public static final String MSG_KEY_CONFIG_DB_URL = "db.url";
+	public static final String MSG_KEY_CONFIG_DB_ID = "db.id";
+	public static final String MSG_KEY_CONFIG_DB_PWD = "db.pwd";
+	public static final String MSG_KEY_CONFIG_DB_QUERY = "db.query";
 }

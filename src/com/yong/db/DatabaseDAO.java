@@ -19,12 +19,8 @@ public class DatabaseDAO {
 		database = new ConnectorDatabase(connectorSSH);
 	}
 	
-	public void retrieveTestData() throws Exception {
-		database.selectList("", "");
-	}
-	
 	public List<DatabaseVO> retrieveTestConnect(DatabaseVO vo) throws Exception {
 		logger.info("Trying to retrieve Test Connect : " + vo.toStringJson());
-		return (List<DatabaseVO>) database.selectList("retrieveTestConnect", vo);
+		return (List<DatabaseVO>) database.selectList(namespace + "retrieveTestConnect", vo);
 	}
 }

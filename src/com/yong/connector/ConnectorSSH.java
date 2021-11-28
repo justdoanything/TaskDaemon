@@ -13,6 +13,9 @@ import com.yong.msg.MsgCodeConfiguration;
 import com.yong.msg.MsgCodeException;
 import com.yong.msg.MsgCodeSSH;
 
+import lombok.Getter;
+
+@Getter
 @SuppressWarnings("unchecked")
 public class ConnectorSSH {
 
@@ -30,8 +33,8 @@ public class ConnectorSSH {
 	private String remoteName;
 	
 	// execute.type = mysql
-	private String remoteMysqlHost;
-	private int remoteMysqlPort;
+	private String remoteTunnelHost;
+	private int remoteTunnelPort;
 
 	// execute.type = db
 	private List<String> remoteCommandLine;
@@ -43,80 +46,6 @@ public class ConnectorSSH {
 	private String remoteDbId;
 	private String remoteDbPwd;
 	private String remoteDbQuery;
-	
-	/**
-	 * @author yongwoo
-	 * @throws Exception
-	 * @category SSH
-	 * @implNote Getter
-	 */
-	public String getEnv() {
-		return env;
-	}
-
-	public int getExecuteInterval() {
-		return executeInterval;
-	}
-
-	public String getExecuteType() {
-		return executeType;
-	}
-
-	public int getLocalPort() {
-		return localPort;
-	}
-
-	public String getRemoteHost() {
-		return remoteHost;
-	}
-
-	public int getRemotePort() {
-		return remotePort;
-	}
-
-	public String getRemoteKey() {
-		return remoteKey;
-	}
-
-	public String getRemoteName() {
-		return remoteName;
-	}
-
-	public String getRemoteMysqlHost() {
-		return remoteMysqlHost;
-	}
-
-	public int getRemoteMysqlPort() {
-		return remoteMysqlPort;
-	}
-
-	public List<String> getRemoteCommandLine() {
-		return remoteCommandLine;
-	}
-
-	public String getRemoteDbMybatis() {
-		return remoteDbMybatis;
-	}
-
-	public String getRemoteDbDriver() {
-		return remoteDbDriver;
-	}
-
-	public String getRemoteDbUrl() {
-		return remoteDbUrl;
-	}
-
-	public String getRemoteDbId() {
-		return remoteDbId;
-	}
-
-	public String getRemoteDbPwd() {
-		return remoteDbPwd;
-	}
-
-	public String getRemoteDbQuery() {
-		return remoteDbQuery;
-	}
 
 	/**
 	 * @author yongwoo
@@ -148,11 +77,11 @@ public class ConnectorSSH {
 		logger.debug("[" + env + "] Complete to set remoteName : " + this.remoteName);
 		
 		// Set id/pwd for mysql if execute.type is mysql
-		if(executeType.equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_MYSQL)) {
-			this.remoteMysqlHost = Configuration.getString(index, "remote.mysql.host");
-			this.remoteMysqlPort = Configuration.getInt(index, "remote.mysql.port");
-			logger.debug("[" + env + "] Complete to set remoteMysqlHost : " + this.remoteMysqlHost);
-			logger.debug("[" + env + "] Complete to set remoteMysqlPort : " + this.remoteMysqlPort);
+		if(executeType.equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_TUNNEL)) {
+			this.remoteTunnelHost = Configuration.getString(index, "remote.tunnel.host");
+			this.remoteTunnelPort = Configuration.getInt(index, "remote.tunnel.port");
+			logger.debug("[" + env + "] Complete to set remoteTunnelHost : " + this.remoteTunnelHost);
+			logger.debug("[" + env + "] Complete to set remoteTunnelPort : " + this.remoteTunnelPort);
 		}
 		// Set command list for command if execute.type is command
 		else if(executeType.equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_COMMAND)) {
@@ -163,12 +92,16 @@ public class ConnectorSSH {
 		}
 		// Set properties if execute.type = db
 		else if(executeType.equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_DB)) {
+			this.remoteTunnelHost = Configuration.getString(index, "remote.tunnel.host");
+			this.remoteTunnelPort = Configuration.getInt(index, "remote.tunnel.port");
 			this.remoteDbMybatis = Configuration.getString(index, "remote.db.mybatis");
-			this.remoteDbDriver = Configuration.getString(index, "remote.db.drive");
+			this.remoteDbDriver = Configuration.getString(index, "remote.db.driver");
 			this.remoteDbUrl = Configuration.getString(index, "remote.db.url");
 			this.remoteDbId = Configuration.getString(index, "remote.db.id");
 			this.remoteDbPwd = Configuration.getString(index, "remote.db.pwd");
 			this.remoteDbQuery = Configuration.getString(index, "remote.db.query");
+			logger.debug("[" + env + "] Complete to set remoteTunnelHost : " + this.remoteTunnelHost);
+			logger.debug("[" + env + "] Complete to set remoteTunnelPort : " + this.remoteTunnelPort);
 			logger.debug("[" + env + "] Complete to set remoteDbMybatis : " + this.remoteDbMybatis);
 			logger.debug("[" + env + "] Complete to set remoteDbDriver : " + this.remoteDbDriver);
 			logger.debug("[" + env + "] Complete to set remoteDbUrl : " + this.remoteDbUrl);
@@ -226,10 +159,10 @@ public class ConnectorSSH {
 			session = jsch.getSession(this.remoteName, this.remoteHost, this.remotePort);
 			jsch.addIdentity(this.remoteKey);
 			logger.info("[" + this.env + "] SSH Connection Information : "
-					+ "\n- SSH ENV : " + this.env
-					+ "\n- SSH USER : " + this.remoteName
-					+ "\n- SSH HOST : " + this.remoteHost
-					+ "\n- SSH PORT : " + this.remotePort
+					+ "\n  - SSH ENV : " + this.env
+					+ "\n  - SSH USER : " + this.remoteName
+					+ "\n  - SSH HOST : " + this.remoteHost
+					+ "\n  - SSH PORT : " + this.remotePort
 					);
 			
 			Properties config = new Properties();
@@ -244,11 +177,11 @@ public class ConnectorSSH {
 				logger.info("[" + this.env + "] TRY TO OPEN SSH TUNNELING !");
 				session.setPortForwardingL(
 						this.localPort,
-						this.remoteMysqlHost,
-						this.remoteMysqlPort);
+						this.remoteTunnelHost,
+						this.remoteTunnelPort);
 				logger.info("[" + this.env + "] SSH Tunneling - Port Forward (Local -> Destination) : "
 						+ MsgCodeSSH.MSG_WORD_OPEN_HOST +"/" + this.localPort + " -> "
-						+ this.remoteMysqlHost + "/" + this.remoteMysqlPort);
+						+ this.remoteTunnelHost + "/" + this.remoteTunnelPort);
 				logger.info("[" + this.env + "] Success to open SSH Tunneling !");
 			}
 			
