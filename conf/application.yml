@@ -53,7 +53,7 @@ environment:
         db: 
           mybatis: ./conf/mybatis.xml
           driver: com.mysql.jdbc.Driver
-          url: "jdbc:mysql://127.0.0.1:3306/test"
+          url: jdbc:mysql://127.0.0.1:3306/test
           id: test
           pwd: test
           query: ./conf/sq.xml
