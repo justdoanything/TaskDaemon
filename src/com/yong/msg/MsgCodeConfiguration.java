@@ -12,5 +12,6 @@ public class MsgCodeConfiguration {
 	
 	public static final String MSG_WORD_EXECUTE_TYPE_MYSQL = "mysql";
 	public static final String MSG_WORD_EXECUTE_TYPE_COMMAND = "command";
+	public static final String MSG_WORD_EXECUTE_TYPE_DB = "db";
 }
 
