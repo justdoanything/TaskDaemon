@@ -23,6 +23,7 @@
 hs_err_pid*
 /bin/
 /log/
+/target/
 
 # exclude test file
 /conf/private_key/private-test.ppk
