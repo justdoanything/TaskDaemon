@@ -7,5 +7,5 @@ And also, run more complex task if you put your logic into DatabaseService class
   - Type2 : Open channel and execute linux command repeatedly.
   - Type3 : Open SSH tunneling and execute a specific query repeatedly.
 
-Project Type : maven
+Project Type : maven\
 Refo : https://github.com/justdoanything/WatchDB
