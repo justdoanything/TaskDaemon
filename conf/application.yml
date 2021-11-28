@@ -7,7 +7,7 @@ environment:
     - env: prod
       execute:
         interval: 30000
-        type: mysql 
+        type: tunnel 
       local:
         port: 3000
       remote:
@@ -15,7 +15,7 @@ environment:
         host: prodRemoteHost
         port: 22
         key: prodRemoteKey
-        mysql: 
+        tunnel: 
           host: 127.0.0.1
           port: 3306
 # Type2 : Open ssh tunneling and execute linux command repeatedly
@@ -47,6 +47,9 @@ environment:
         host: devRemoteHost
         port: 22
         key: devRemoteKey
+        tunnel:
+          host: localhost
+          port: 3306
         db: 
           mybatis: ./conf/mybatis.xml
           driver: com.mysql.jdbc.Driver
