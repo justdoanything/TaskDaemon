@@ -92,16 +92,12 @@ public class ConnectorSSH {
 		}
 		// Set properties if execute.type = db
 		else if(executeType.equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_DB)) {
-			this.remoteTunnelHost = Configuration.getString(index, "remote.tunnel.host");
-			this.remoteTunnelPort = Configuration.getInt(index, "remote.tunnel.port");
 			this.remoteDbMybatis = Configuration.getString(index, "remote.db.mybatis");
 			this.remoteDbDriver = Configuration.getString(index, "remote.db.driver");
 			this.remoteDbUrl = Configuration.getString(index, "remote.db.url");
 			this.remoteDbId = Configuration.getString(index, "remote.db.id");
 			this.remoteDbPwd = Configuration.getString(index, "remote.db.pwd");
 			this.remoteDbQuery = Configuration.getString(index, "remote.db.query");
-			logger.debug("[" + env + "] Complete to set remoteTunnelHost : " + this.remoteTunnelHost);
-			logger.debug("[" + env + "] Complete to set remoteTunnelPort : " + this.remoteTunnelPort);
 			logger.debug("[" + env + "] Complete to set remoteDbMybatis : " + this.remoteDbMybatis);
 			logger.debug("[" + env + "] Complete to set remoteDbDriver : " + this.remoteDbDriver);
 			logger.debug("[" + env + "] Complete to set remoteDbUrl : " + this.remoteDbUrl);

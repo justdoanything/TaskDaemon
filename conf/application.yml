@@ -47,9 +47,6 @@ environment:
         host: devRemoteHost
         port: 22
         key: devRemoteKey
-        tunnel:
-          host: localhost
-          port: 3306
         db: 
           mybatis: ./conf/mybatis.xml
           driver: com.mysql.jdbc.Driver
