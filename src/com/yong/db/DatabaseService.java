@@ -11,14 +11,28 @@ public class DatabaseService {
 	private LoggingHandler logger = new LoggingHandler(this.getClass(), Configuration.loggerUse);
 	private DatabaseDAO databaseDAO;
 	
-	public DatabaseService(ConnectorSSH connectorSSH) {
+	/**
+	 * @author yongwoo
+	 * @throws Exception
+	 * @category Service
+	 * @implNote Create DAO class (connect database)
+	 */
+	public DatabaseService(ConnectorSSH connectorSSH) throws Exception {
 		this.databaseDAO = new DatabaseDAO(connectorSSH);
 	}
 	
+	/**
+	 * @author yongwoo
+	 * @throws Exception
+	 * @category Service
+	 * @implNote Execute any process you want
+	 */
 	public void execute() throws Exception {
-		// Add your logic
+		/*
+		 * Add your logic you want
+		 */
 		
-		// Call DAO
+		// Execute DAO
 		DatabaseVO vo = new DatabaseVO();
 		vo.setValue1("VO VALUE 1");
 		vo.setValue2("VO VALUE 2");
