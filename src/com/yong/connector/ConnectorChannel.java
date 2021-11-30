@@ -14,6 +14,12 @@ public class ConnectorChannel {
 	
 	private static LoggingHandler logger = new LoggingHandler(ConnectorChannel.class, Configuration.loggerUse);
 	
+	/**
+	 * @author yongwoo
+	 * @throws Exception
+	 * @category Command
+	 * @implNote Execute linux command into session (ssh)
+	 */
 	public static String runCommand(Session session, String command) throws Exception {
 		String resultMsg = "";
 		try {
@@ -38,7 +44,7 @@ public class ConnectorChannel {
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(MsgCodeException.MSG_CODE_COMMAND_NOT_EXECUTE_MSG + " : " + e.toString());
-			ExceptionHandler.exception(MsgCodeException.MSG_TYPE_CHANNEL, MsgCodeException.MSG_CODE_COMMAND_NOT_EXECUTE_MSG, e.toString());
+			ExceptionHandler.exception(MsgCodeException.MSG_TYPE_COMMAND, MsgCodeException.MSG_CODE_COMMAND_NOT_EXECUTE, e.toString());
 		}
 		return resultMsg;
 	}

@@ -21,22 +21,24 @@ public class ConnectorSSH {
 
 	private LoggingHandler logger = new LoggingHandler(this.getClass(), Configuration.loggerUse);
 	
+	// Values under envList in application.yml
 	private String env;
+	
 	private int executeInterval;
 	private String executeType;
 	
 	private int localPort;
 	
+	private String remoteName;
 	private String remoteHost;
 	private int remotePort;
 	private String remoteKey;
-	private String remoteName;
 	
-	// execute.type = mysql
+	// execute.type = tunnel
 	private String remoteTunnelHost;
 	private int remoteTunnelPort;
 
-	// execute.type = db
+	// execute.type = command
 	private List<String> remoteCommandLine;
 	
 	// execute.type = db
@@ -123,8 +125,10 @@ public class ConnectorSSH {
 		try {
 			socket = new Socket(MsgCodeSSH.MSG_WORD_OPEN_HOST, this.localPort);
 			socket.setSoLinger(true, 0);	// Disallow "TIME_WAIT" status of TCP
+			// port is already open
 			logger.info("[" + this.env + "] CHECKING LOCAL PORT : [" + this.localPort + "] is already opened!");
 		}catch (Exception e) {
+			// port is not opened. will try to open ssh
 			logger.info("[" + this.env + "] CHECKING LOCAL PORT : [" + this.localPort + "] is not opened!");
 			result = true;
 		}finally {
