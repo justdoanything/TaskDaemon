@@ -35,7 +35,7 @@ environment:
             - ls -al
             - pwd
             - lscpu
-# Type3 : Open ssh tunnel and execute query repeatedly
+# Type3 : Execute query repeatedly
     - env: dev
       execute:
         interval: 60000
