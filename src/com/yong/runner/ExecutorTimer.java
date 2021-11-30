@@ -77,11 +77,8 @@ public class ExecutorTimer implements Runnable {
 						else if(connectorSSH != null
 								&& connectorSSH.getExecuteType().equals(MsgCodeConfiguration.MSG_WORD_EXECUTE_TYPE_DB)
 								&& connectorSSH.getRemoteDbMybatis() != null) {
-							// Open ssh tunneling if the local port is not opened
-							if(connectorSSH.checkSshPort()) {
-								connectorSSH.openSshPort();
-							}
-							// Set Mybatis and connect sql factory
+
+							// Set database configuration and run service
 							DatabaseService ds = new DatabaseService(connectorSSH);
 							ds.execute();
 						}

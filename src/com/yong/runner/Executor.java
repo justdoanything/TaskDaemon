@@ -6,7 +6,7 @@ import com.yong.connector.ConnectorSSH;
 public class Executor {
 	public static void main(String[] args) {
 		try {
-			//initializa this application
+			//initialize this application
 			Configuration.initialize();
 
 			// Execute threads as many as number of "env" in application.yml
