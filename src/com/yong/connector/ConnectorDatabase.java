@@ -19,6 +19,9 @@ import com.yong.msg.MsgCodeException;
 public class ConnectorDatabase {
 
 	private LoggingHandler logger = new LoggingHandler(this.getClass(), Configuration.loggerUse);
+	
+	// Use private type if you want to execute several sqlSessionFactory
+	// private SqlSessionFactory ssf;
 	private static SqlSessionFactory ssf;
 	
 	/**
