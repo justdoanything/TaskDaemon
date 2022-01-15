@@ -2,8 +2,8 @@
 export LANG=ko_KR.eucKR
 
 ## main file
-MAIN_JAR=watcher_ssh_tunneling_v1.0.jar
-CONTEXT=
+MAIN_JAR=ssh_tunneling.jar
+CONTEXT= -Xms1024m -Xmx1024m 
 
 PID=$(ps x | grep $CONTEXT | grep -v grep | aws '/java/ {print $1}')
 
