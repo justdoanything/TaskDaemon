@@ -59,6 +59,7 @@
 	<build>
 		<defaultGoal>assembly:assembly</defaultGoal>
 		<sourceDirectory>src</sourceDirectory>
+		<finalName>ssh_tunneling</finalName>
 		<plugins>
 			<plugin>
 		        <groupId>org.apache.maven.plugins</groupId>
