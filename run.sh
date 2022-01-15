@@ -2,68 +2,67 @@
 export LANG=ko_KR.eucKR
 
 ## main file
-MAIN_JAR=ssh_tunneling.jar
-CONTEXT= -Xms1024m -Xmx1024m 
+MAIN_JAR=/usr/src/app/ssh_tunneling.jar
+CONTEXT=/usr/src/app/conf/application.yml
 
-PID=$(ps x | grep $CONTEXT | grep -v grep | aws '/java/ {print $1}')
+PID=$(ps x | grep $CONTEXT | grep -v grep | awk '/java/ {print $1}')                                                                                                                                                                                                                      
+                                                                                                                                                                                                                                                                                          
+start(){                                                                                                                                                                                                                                                                                  
+	if [ $PID ] ; then                                                                                                                                                                                                                                                                
+		ps aux|grep $CONTEXT | grep -v grep                                                                                                                                                                                                                                       
+		echo "already started."                                                                                                                                                                                                                                                   
+	else                                                                                                                                                                                                                                                                              
+		echo "start process..."                                                                                                                                                                                                                                                   
+		java -jar $MAIN_JAR $CONTEXT &                                                                                                                                                                                                                                            
+		ps -ef | grep $CONTEXT | grep -v grep                                                                                                                                                                                                                                     
+	fi                                                                                                                                                                                                                                                                                
+}                                                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                          
+stop(){                                                                                                                                                                                                                                                                                   
+	if [ $PID ] ; then                                                                                                                                                                                                                                                                
+		ps aux|grep $CONTEXT | grep -v grep                                                                                                                                                                                                                                       
+		kill $PID                                                                                                                                                                                                                                                                 
+		echo "stop process."                                                                                                                                                                                                                                                      
+	else                                                                                                                                                                                                                                                                              
+		echo "not running."                                                                                                                                                                                                                                                       
+	fi                                                                                                                                                                                                                                                                                
+}                                                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                          
+restart(){                                                                                                                                                                                                                                                                                
+	stop                                                                                                                                                                                                                                                                              
+		echo "start process..."                                                                                                                                                                                                                                                           
+		java -jar $MAIN_JAR $CONTEXT &                                                                                                                                                                                                                                                    
+        ps -ef | grep $CONTEXT | grep -v grep                                                                                                                                                                                                                                             
+}                                                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                          
+show(){                                                                                                                                                                                                                                                                                   
+	top -c -p$PID                                                                                                                                                                                                                                                                     
+}   
 
-start(){
-	if [$PID] ; then
-		ps aux|grep $CONTEXT | grep -v grep
-		echo "already started."
-	else
-		echo "start process..."
-		java -jar $MAIN_JAR $CONTEXT &
-		ps -ef | grep $CONTEXT | grep -v grep
-	fi
-}
-
-stop(){
-	if [$PID] ; then
-		ps aux|grep $CONTEXT | grep -v grep
-		kill $PID
-		echo "stop process."
-	else
-		echo "not running."
-	fi
-}
-
-restart(){
-	stop
-	
-	echo "start process..."
-	java -jar $MAIN_JAR $CONTEXT &
-	ps -ef | grep $CONTEXT | grep -v grep
-}
-
-show(){
-	top -c -p$PID
-}
-
-status(){
-	if ps aux|grep $CONTEXT | grep -v grep
-	then
-		echo "running.."
-	else
-		echo "not running."
-	fi
-}
-
-# See how we were called.
-case "$1" in
-	start)
-	start
-	;;
-	stop)
-	stop
-	;;
-	restart)
-	restart
-	;;
-	show)
-	show
-	;;
-	*)
-	echo $"Usage: $0 {start|stop|restart|show}"
-	status
+status(){                                                                                                                                                                                                                                                                                 
+	if ps aux|grep $CONTEXT | grep -v grep                                                                                                                                                                                                                                            
+	then                                                                                                                                                                                                                                                                              
+		echo "running.."                                                                                                                                                                                                                                                          
+	else                                                                                                                                                                                                                                                                              
+		echo "not running."                                                                                                                                                                                                                                                       
+	fi                                                                                                                                                                                                                                                                                
+}                                                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                          
+# See how we were called.                                                                                                                                                                                                                                                                 
+case "$1" in                                                                                                                                                                                                                                                                              
+    start)                                                                                                                                                                                                                                                                                
+        start                                                                                                                                                                                                                                                                             
+        ;;                                                                                                                                                                                                                                                                                
+    stop)                                                                                                                                                                                                                                                                                 
+        stop                                                                                                                                                                                                                                                                              
+        ;;                                                                                                                                                                                                                                                                                
+    restart)                                                                                                                                                                                                                                                                              
+        restart                                                                                                                                                                                                                                                                           
+        ;;                                                                                                                                                                                                                                                                                
+	show)                                                                                                                                                                                                                                                                             
+        show                                                                                                                                                                                                                                                                              
+        ;;                                                                                                                                                                                                                                                                                
+    *)                                                                                                                                                                                                                                                                                    
+        echo $"Usage: $0 {start|stop|restart|show}"                                                                                                                                                                                                                                       
+        status                                                                                                                                                                                                                                                                            
 esac
