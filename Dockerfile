@@ -5,7 +5,7 @@ RUN apt-get update
 RUN apt-get install -y openjdk-8-jdk
 RUN apt-get install -y vim
 
-### if you want to use private key into your environment directory like .ssh, copy the key and change value in application.yml 
+### if you want to use private key into your environment directory like .ssh, change a path of 'remote.key' in application.yml 
 
 # copy required files such as config files, shell file to need run and jar file 
 ADD ./conf /usr/src/app/conf
