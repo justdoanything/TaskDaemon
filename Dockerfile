@@ -12,6 +12,7 @@ ADD ./conf /usr/src/app/conf
 COPY ./run.sh /usr/src/app
 COPY ./entrypoint.sh /usr/src/app
 COPY ./target/ssh_tunneling-jar-with-dependencies.jar /usr/src/app/ssh_tunneling.jar
+COPY ./README.md /usr/src/app
 
 # run command "chmod"
 RUN chmod -R +x /usr/src/app
