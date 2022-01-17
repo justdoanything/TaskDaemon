@@ -1,16 +1,17 @@
 TroubleShooting
 ===
 
-###Write Dockerfile
-- FROM openjdk:8u201-jre-alpine3.9
+### Write Dockerfile
+
+- 💥FROM openjdk:8u201-jre-alpine3.9
   - 복사하는 파일 경로 등 이후에 Container 접근해서 관리하기 힘들 것 같아서 Ubuntu image로 변경 후 jdk 설치하는 방식으로 변경
   - vim 설치 명령어 추가
-- 필수 파일들은 /usr/src/app 경로로 COPY 할 때 에러 발생
+- 💥필수 파일들은 /usr/src/app 경로로 COPY 할 때 에러 발생
   - 첫 명령어를 ADD 로 변경
-- Container를 -d run 해도 자동으로 stop 되는 현상
+- 💥Container를 -d run 해도 자동으로 stop 되는 현상
   - `CMD ["tail", "-f"]` 명령어를 추가해서 해결
   - 더 좋은 방법이 있는지 더 확인해야함
-- `sh run.sh start` 명령어 실행 시 오류 발생
+- 💥`sh run.sh start` 명령어 실행 시 오류 발생
   - not found 에러 
     - windows와 unix의 줄바꿈 차이 때문에 발생
     - Ubuntu 환경에서 `vi -b` 로 파일을 열어보면 "^M" 문자열 확인
