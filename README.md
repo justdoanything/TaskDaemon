@@ -72,7 +72,7 @@ You can run the below types of tasks repeatedly if you change some of values int
 ## Project Type
 - Project : Java 1.8 (free version) / Maven
 - If you want to run by Docker.
-  - You can chnage values in configurable files such as application.yml, log4j.properties, mybatis.xml, sql.xml and java class.
+  - You can chage values in configurable files such as application.yml, log4j.properties, mybatis.xml, sql.xml and java class.
   - You can run docker commands to make a docker image.
     It can be refered Dockerfile.
     - `docker build -t ssh_tunneling:1.0 .`
