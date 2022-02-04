@@ -11,10 +11,10 @@ environment:
       local:
         port: 3000
       remote:
-        name: prodRemoteName
-        host: prodRemoteHost
+        name: prod_remote_name
+        host: ssh.ap-3.sample.cloud
         port: 22
-        key: prodRemoteKey
+        key: ./conf/private_key/private_key.ppk
         tunnel: 
           host: 127.0.0.1
           port: 3306
@@ -26,10 +26,10 @@ environment:
       local:
         port: 3005
       remote:
-        name: stgRemoteName
-        host: stgRemoteHost
+        name: stg_remote_name
+        host: ssh.ap-3.sample.cloud
         port: 22
-        key: stgRemoteKey
+        key: ./conf/private_key/private_key.ppk
         command:
           line:
             - ls -al
@@ -43,15 +43,15 @@ environment:
       local:
         port: 3010
       remote:
-        name: devRemoteName
-        host: devRemoteHost
+        name: dev_remote_name
+        host: ssh.ap-3.sample.cloud
         port: 22
-        key: devRemoteKey
+        key: ./conf/private_key/private_key.ppk
         db: 
           mybatis: ./conf/mybatis.xml
           driver: com.mysql.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/test
-          id: test
-          pwd: test
+          id: mysql_id
+          pwd: mysql_pwd_123
           query: ./conf/sq.xml
           
