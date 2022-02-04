@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Built-By: 82736
-Class-Path: jsch-0.1.54.jar log4j-1.2.17.jar snakeyaml-1.26.jar mybati
- s-3.5.7.jar commons-lang3-3.12.0.jar mysql-connector-java-8.0.26.jar 
- protobuf-java-3.11.4.jar
-Build-Jdk: 1.8.0_271
-Created-By: Maven Integration for Eclipse
-Main-Class: com.yong.runner.Executor
-
