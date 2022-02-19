@@ -84,7 +84,7 @@ You can run the below types of tasks repeatedly if you change some of values int
       - Run command in docker container : `sh run.sh start`
   - I had uploaded basic docker image file in docker hub. Run below commands if you want.
     - `docker pull yongwoo1992/repeatedly_multi_task:1.0`
-    - `docker run -d --name ssh_tunneling yongwoo1992/repeatedly_multi_task:1.0
+    - `docker run -d --name ssh_tunneling yongwoo1992/repeatedly_multi_task:1.0`
     - `docker exec -it ssh_tunneling /bin/bash`
 - If you want to run by old fashion.
   - Run `maven build` with dependencies.
