@@ -83,7 +83,7 @@ You can run the below types of tasks repeatedly if you change some of values int
       - Chnage values in conf folder.
       - Run command in docker container : `sh run.sh start`
   - I had uploaded basic docker image file in docker hub.\
-    Run docker command : `docker pull yongwoo1992/repeatedly_multi_task`
+    Run docker command : `docker pull yongwoo1992/repeatedly_multi_task:1.0`
 - If you want to run by old fashion.
   - Run `maven build` with dependencies.
     ```xml
